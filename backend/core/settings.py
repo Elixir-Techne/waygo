@@ -9,36 +9,49 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import datetime
+import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+import environ
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-=1wg*b^mo_l=d4-)kd$=r-n64_#on^al1f^b-3-)5$io2^b+tx"
+SECRET_KEY = env.str('WG_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('WG_DEBUG', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('WG_ALLOWED_HOSTS', cast=str, default='*')
 
 
 # Application definition
 
-INSTALLED_APPS = [
+
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "main",
+    'drf_yasg',
+    'django_filters',
 ]
+
+PROJECT_APPS = [
+     "main",
+]
+
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -77,10 +90,11 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "timberscadademo",  # To developer: change the database name to timberscada
-        "HOST": "localhost",
-        "USER": "root",
-        "PASSWORD": "VietQuocanh79",
+        "NAME": env.str('WG_DJANGO_DB_NAME'),  # To developer: change the database name to timberscada
+        "HOST": env.str('WG_DJANGO_DB_HOST'),
+        "USER": env.str('WG_DJANGO_DB_USER'),
+        "PASSWORD": env.str('WG_DJANGO_DB_PASS'),
+        "PORT": env.int('WG_DJANGO_DB_PORT', 3306)
     }
 }
 
@@ -124,3 +138,27 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=env.int("ACCESS_TOKEN_LIFETIME_IN_DAYS", default=1)),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=env.int("REFRESH_TOKEN_LIFETIME_IN_DAYS", default=7)),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id'
+}
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'main.serializers.UserSerializer',
+}
+
+DEFAULT_DAYS = env.int('WG_DEFAULT_DAYS', default=90)
