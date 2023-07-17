@@ -1,7 +1,8 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from main.serializers import UserSerializer
+from main.serializers import AppUserSerializer
 
 
 class WayGoTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -9,7 +10,10 @@ class WayGoTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         data['access_token'] = data['access']
         data['refresh_token'] = data['refresh']
-        data['user'] = UserSerializer(instance=self.user).data
+        try:
+            data['app_user'] = AppUserSerializer(instance=self.user.appuser).data
+        except ObjectDoesNotExist:
+            raise ObjectDoesNotExist('User not associated with any company')
         del data['access']
         del data['refresh']
         return data
