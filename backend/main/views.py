@@ -203,13 +203,9 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
     filterset_class = LotFilterSet
 
     def get_queryset(self):
-        start_time = self.request.query_params.get('start_time')
-        end_time = self.request.query_params.get('end_time')
         if self.request.user.is_superuser:
             return Lot.objects.all()
         qs = Lot.objects.filter(company=self.request.user.appuser.company).order_by("-start_time")
-        if start_time and end_time:
-            qs = qs.filter(start_time__range=[start_time, end_time])
         return qs
 
     def get_serializer_class(self):
