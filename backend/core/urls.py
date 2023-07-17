@@ -44,7 +44,7 @@ if settings.DEBUG:
     ]
 urlpatterns.extend([
     path('admin/', admin.site.urls),
-    re_path(r'^api/rest-auth/login/$', WayGoTokenObtainPairView.as_view(), name='rest_login'),
-    re_path(r'^api/rest-auth/refresh-token/', TokenRefreshView.as_view(), name='token_refresh'),
+    re_path(r'^api/auth/login/$', WayGoTokenObtainPairView.as_view(), name='rest_login'),
+    re_path(r'^api/auth/refresh-token/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/', include('main.urls')),
 ])

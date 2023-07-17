@@ -1,4 +1,8 @@
+from datetime import timedelta
+
+from django.conf import settings
 from django.http import JsonResponse
+from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -11,7 +15,7 @@ from rest_framework.response import Response
 
 from main.filters import LotFilterSet
 from main.models import Lot, LotData, StatusReport
-from main.serializers import LotSerializer, LotDataSerializer, LotListSerializer, StatusReportSerializer
+from main.serializers import LotSerializer, LotDataSerializer, StatusReportSerializer
 
 
 @require_GET
@@ -209,8 +213,6 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
         return qs
 
     def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return LotListSerializer
         return LotSerializer
 
     @swagger_auto_schema(
@@ -222,14 +224,44 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
         lot_data = LotData.objects.filter(lot_id=pk)
         return Response(LotDataSerializer(instance=lot_data, many=True).data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(responses={200: LotSerializer}, )
+    @action(
+        detail=False, methods=['get'], url_name='ongoing_lot', url_path='ongoing-lot'
+    )
+    def ongoing_lot(self, request):
+        three_months_ago = timezone.now() - timedelta(days=settings.DEFAULT_DAYS)
+        ongoing_lot = Lot.objects.filter(complete_time__isnull=True, start_time__gte=three_months_ago)
+        return Response(self.get_serializer(instance=ongoing_lot, many=True).data, status=status.HTTP_200_OK)
 
-class LotDataViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+    @swagger_auto_schema(responses={200: LotSerializer}, )
+    @action(
+        detail=False, methods=['get'], url_name='historical_lot', url_path='historical-lot'
+    )
+    def historical_lot(self, request):
+        three_months_ago = timezone.now() - timedelta(days=settings.DEFAULT_DAYS)
+        historical_lot = Lot.objects.filter(
+            Q(complete_time__isnull=False) | Q(start_time__lt=three_months_ago)
+        )
+        return Response(self.get_serializer(instance=historical_lot, many=True).data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(responses={200: LotSerializer}, )
+    @action(
+        detail=True, methods=['get'], url_name='mark_lot_completed', url_path='mark-lot-completed'
+    )
+    def mark_lot_completed(self, request, pk=None):
+        completed_lot = Lot.objects.get(id=pk)
+        completed_lot.complete_time = timezone.now().replace(microsecond=0)
+        completed_lot.save()
+        return Response(self.get_serializer(instance=completed_lot).data, status=status.HTTP_200_OK)
+
+
+class LotDataViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = LotDataSerializer
 
 
 class StatusReportViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, )
     serializer_class = StatusReportSerializer
 
     def get_queryset(self):

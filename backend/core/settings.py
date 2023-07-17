@@ -146,15 +146,19 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=env.int("ACCESS_TOKEN_LIFETIME_IN_DAYS", default=1)),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=env.int("REFRESH_TOKEN_LIFETIME_IN_DAYS", default=7)),
     'AUTH_HEADER_TYPES': ('Bearer',),
     'USER_ID_FIELD': 'id'
 }
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'main.serializers.UserSerializer',
 }
+
+DEFAULT_DAYS = env.int('WG_DEFAULT_DAYS', default=90)

@@ -15,12 +15,6 @@ class LotSerializer(ModelSerializer):
 
     class Meta:
         model = Lot
-        exclude = ['id']
-
-
-class LotListSerializer(ModelSerializer):
-    class Meta:
-        model = Lot
         fields = '__all__'
 
 
