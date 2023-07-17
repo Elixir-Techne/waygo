@@ -29,8 +29,7 @@ function Default() {
     }
   };
 
-  // Close sidenav when mouse leave mini sidenav
-  const handleOnMouseLeave = () => {
+    const handleOnMouseLeave = () => {
     if (onMouseEnter) {
       setMiniSidenav(dispatch, true);
       setOnMouseEnter(false);
@@ -42,7 +41,6 @@ function Default() {
       <DashboardLayout>
         <Sidenav
           color={sidenavColor}
-          // brandName="Waygo"
           brand={waygoPng}
           onMouseEnter={handleOnMouseEnter}
           onMouseLeave={handleOnMouseLeave}

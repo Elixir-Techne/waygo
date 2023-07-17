@@ -4,11 +4,20 @@ import HistoricalLots from "pages/historicalLots";
 import Statistics from "pages/statistics";
 import Technology from "pages/technology";
 import DashboardLayout from "layouts/dashboard";
-import { useRoutes } from "react-router-dom";
+import { Navigate, useRoutes } from "react-router-dom";
+import SignIn from "layouts/authentication/sign-in";
 
-export const routes = [
+export const routes = (loggedIn = false) => [
   {
-    element: <DashboardLayout />,
+    path: "/sign-in",
+    element: <SignIn />,
+  },
+  {
+    element: loggedIn ? (
+      <DashboardLayout />
+    ) : (
+      <Navigate to={"/sign-in"} replace />
+    ),
     path: "/",
     children: [
       {
@@ -36,8 +45,14 @@ export const routes = [
 ];
 
 const index = () => {
+  const loggedIn =
+    localStorage.getItem("refresh_token") ||
+    localStorage.getItem("access_token")
+      ? true
+      : false;
+  const appRoutes = routes(loggedIn);
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const content = useRoutes(routes);
+  const content = useRoutes(appRoutes);
   return content;
 };
 

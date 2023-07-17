@@ -1,25 +1,4 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState } from "react";
-
-// react-router-dom components
-import { Link } from "react-router-dom";
-
-// @mui material components
-import Switch from "@mui/material/Switch";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
@@ -28,68 +7,141 @@ import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 
 // Authentication layout components
-import IllustrationLayout from "layouts/authentication/components/IllustrationLayout";
+import CoverLayout from "../components/CoverLayout";
+import { Card } from "@mui/material";
+import httpService from "utils/httpServices";
+import { Endpoints } from "utils/httpServices";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 // Image
 const bgImage =
   "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg";
 
-function Illustration() {
-  const [rememberMe, setRememberMe] = useState(false);
+const initialValues = {
+  userName: "",
+  password: "",
+};
 
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
+const validations = yup.object().shape({
+  userName: yup.string().required("Please enter user name"),
+  password: yup.string().required("Please enter password"),
+});
 
+function SignIn() {
+  const navigate = useNavigate();
+  const [notValidUser, setNotValidUser] = useState("");
+  const { values, errors, touched, handleChange, handleSubmit, handleBlur } =
+    useFormik({
+      initialValues: initialValues,
+      validationSchema: validations,
+
+      onSubmit: (values) => {
+        httpService
+          .post(Endpoints.auth, {
+            username: values.userName,
+            password: values.password,
+          })
+          .then((res) => {
+            localStorage.setItem("access_token", res.data.access_token);
+            localStorage.setItem("refresh_token", res.data.refresh_token);
+            localStorage.setItem("user", JSON.stringify(res.data.app_user));
+            navigate("/");
+          })
+          .catch((err) => setNotValidUser(err.response.data.detail));
+      },
+    });
   return (
-    <IllustrationLayout
-      title="Sign In"
-      description="Enter your email and password to sign in"
-      illustration={{
-        image: bgImage,
-        title: '"Attention is the new currency"',
-        description:
-          "The more effortless the writing looks, the more effort the writer actually put into the process.",
-      }}
+    <CoverLayout
+      // title="Welcome!"
+      // description="Use these awesome forms to login or create new account in your project for free."
+      image={bgImage}
+      imgPosition="top"
+      button={{ color: "dark", variant: "gradient" }}
     >
-      <ArgonBox component="form" role="form">
-        <ArgonBox mb={2}>
-          <ArgonInput type="email" placeholder="Email" size="large" />
-        </ArgonBox>
-        <ArgonBox mb={2}>
-          <ArgonInput type="password" placeholder="Password" size="large" />
-        </ArgonBox>
-        <ArgonBox display="flex" alignItems="center">
-          <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-          <ArgonTypography
-            variant="button"
-            fontWeight="regular"
-            onClick={handleSetRememberMe}
-            sx={{ cursor: "pointer", userSelect: "none" }}
-          >
-            &nbsp;&nbsp;Remember me
+      <Card>
+        <ArgonBox p={3} mb={1} textAlign="center">
+          <ArgonTypography variant="h5" fontWeight="medium">
+            Sign-In
           </ArgonTypography>
         </ArgonBox>
-        <ArgonBox mt={4} mb={1}>
-          <ArgonButton color="info" size="large" fullWidth>
-            Sign In
-          </ArgonButton>
+        <ArgonBox pb={3} px={3}>
+          <ArgonBox component="form" role="form">
+            <ArgonBox mb={2}>
+              <ArgonInput
+                id="userName"
+                type="text"
+                placeholder="User Name"
+                value={values.userName}
+                onChange={(e) => {
+                  handleChange(e);
+                  setNotValidUser("");
+                }}
+                onBlur={handleBlur}
+              />
+              {errors.userName && touched.userName ? (
+                <ArgonTypography
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "red",
+                    marginLeft: "0.5rem",
+                  }}
+                >
+                  {errors.userName}
+                </ArgonTypography>
+              ) : null}
+            </ArgonBox>
+            <ArgonBox mb={2}>
+              <ArgonInput
+                id="password"
+                type="password"
+                placeholder="Password"
+                value={values.password}
+                onChange={(e) => {
+                  handleChange(e);
+                  setNotValidUser("");
+                }}
+                onBlur={handleBlur}
+              />
+              {errors.password && touched.password ? (
+                <ArgonTypography
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "red",
+                    marginLeft: "0.5rem",
+                  }}
+                >
+                  {errors.password}
+                </ArgonTypography>
+              ) : null}
+            </ArgonBox>
+            {notValidUser && (
+              <ArgonTypography
+                style={{
+                  fontSize: "0.8rem",
+                  color: "red",
+                  marginLeft: "0.5rem",
+                }}
+              >
+                {notValidUser}
+              </ArgonTypography>
+            )}
+            <ArgonBox mt={4} mb={1}>
+              <ArgonButton
+                variant="gradient"
+                color="dark"
+                fullWidth
+                onClick={handleSubmit}
+              >
+                sign In
+              </ArgonButton>
+            </ArgonBox>
+          </ArgonBox>
         </ArgonBox>
-        <ArgonBox mt={3} textAlign="center">
-          <ArgonTypography variant="button" color="text" fontWeight="regular">
-            Don&apos;t have an account?{" "}
-            <ArgonTypography
-              component={Link}
-              to="/authentication/sign-up"
-              variant="button"
-              color="info"
-              fontWeight="medium"
-            >
-              Sign up
-            </ArgonTypography>
-          </ArgonTypography>
-        </ArgonBox>
-      </ArgonBox>
-    </IllustrationLayout>
+      </Card>
+    </CoverLayout>
   );
 }
 
-export default Illustration;
+export default SignIn;

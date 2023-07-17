@@ -45,12 +45,23 @@ import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import DarkModeSwitcher from "components/DarkModeSwitcher";
 import { FormControlLabel, Stack } from "@mui/material";
+import { setDarkSidenav } from "context";
+import { setDarkMode } from "context";
+import { getUser } from "utils/helper";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useArgonController();
-  const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } =
-    controller;
+  const {user,company} = getUser()
+
+  const {
+    miniSidenav,
+    transparentNavbar,
+    fixedNavbar,
+    openConfigurator,
+    darkMode,
+    sidenavColor,
+  } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
 
@@ -89,6 +100,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
 
+  const handleDarkMode = () => {
+    setDarkSidenav(dispatch, !darkMode);
+    setDarkMode(dispatch, !darkMode);
+  };
+
   return (
     <AppBar
       position={absolute ? "absolute" : navbarType}
@@ -108,14 +124,14 @@ function DashboardNavbar({ absolute, light, isMini }) {
               fontWeight="medium"
               color={light && transparentNavbar ? "white" : "dark"}
             >
-              USER NAME
+              {user.username}
             </ArgonTypography>
             <ArgonTypography
               variant="button"
               fontWeight="medium"
               color={light && transparentNavbar ? "white" : "dark"}
             >
-              COMPANY NAME
+              {company.name}
             </ArgonTypography>
             <ArgonTypography
               variant="button"
@@ -125,7 +141,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               EN/VI
             </ArgonTypography>
             <Stack direction="row" spacing={1} alignItems="center">
-              <DarkModeSwitcher />
+              <DarkModeSwitcher checked={darkMode} onChange={handleDarkMode} />
               <ArgonTypography
                 variant="button"
                 fontWeight="medium"
