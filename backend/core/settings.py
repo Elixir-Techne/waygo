@@ -44,6 +44,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'drf_yasg',
+    'django_filters',
 ]
 
 PROJECT_APPS = [

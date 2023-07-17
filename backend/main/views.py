@@ -3,7 +3,15 @@ from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db.models import Q
-from .models import Lot, LotData
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import mixins, viewsets, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from main.filters import LotFilterSet
+from main.models import Lot, LotData, StatusReport
+from main.serializers import LotSerializer, LotDataSerializer, LotListSerializer, StatusReportSerializer
 
 
 @require_GET
@@ -183,3 +191,49 @@ I need 2 additional endpoints. 1 is for the kilns computer to report status (Sta
 and the 2 one is to register Lot.complete_time of the current lot with value
 once the drying lot is completed at the kiln.
 """
+
+
+class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAuthenticated, )
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = LotFilterSet
+
+    def get_queryset(self):
+        start_time = self.request.query_params.get('start_time')
+        end_time = self.request.query_params.get('end_time')
+        if self.request.user.is_superuser:
+            return Lot.objects.all()
+        qs = Lot.objects.filter(company=self.request.user.appuser.company).order_by("-start_time")
+        if start_time and end_time:
+            qs = qs.filter(start_time__range=[start_time, end_time])
+        return qs
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return LotListSerializer
+        return LotSerializer
+
+    @swagger_auto_schema(
+        responses={200: ""}, )
+    @action(
+        detail=True, methods=['get'], url_name='lot_data', url_path='lot-data'
+    )
+    def lot_lotdata(self, request, pk=None):
+        lot_data = LotData.objects.filter(lot_id=pk)
+        return Response(LotDataSerializer(instance=lot_data, many=True).data, status=status.HTTP_200_OK)
+
+
+class LotDataViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = LotDataSerializer
+
+
+class StatusReportViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = StatusReportSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return StatusReport.objects.all()
+        qs = StatusReport.objects.filter(company=self.request.user.appuser.company)
+        return qs
