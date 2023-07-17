@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 const httpService = Axios.create({
-  baseURL: "http://192.168.1.15:8001/api",
+  baseURL: process.env.REACT_APP_BACKEND_URL,
 });
 
 httpService.interceptors.request.use((request) => {
