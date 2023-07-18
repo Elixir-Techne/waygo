@@ -22,6 +22,9 @@ const svgIcon = {
   },
 
   styleOverrides: {
+    root: {
+      fill: "white",
+    },
     fontSizeInherit: {
       fontSize: "inherit !important",
     },

@@ -36,4 +36,6 @@ export const Endpoints = {
   auth: "/auth/login/",
   refrsh: "/auth/refresh-token/",
   statusReport: "/status-report/chamber-latest-status/",
+  ongoingLots: "/lots/ongoing-lot/",
+  historicalLots: "/lots/historical-lot/",
 };
