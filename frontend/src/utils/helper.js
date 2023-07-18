@@ -9,3 +9,8 @@ export const getUser = () => {
     
   }
 }
+
+export const getChamberStatus = (code) => {
+  if (code === "0") return "Operating";
+  else return "Idle";
+};
