@@ -17,7 +17,7 @@ class Company(models.Model):
 
 class StatusReport(models.Model):
     company = models.ForeignKey(Company, on_delete=models.PROTECT)
-    chamber = models.PositiveSmallIntegerField
+    chamber = models.PositiveSmallIntegerField()
     time = models.DateTimeField()  # local time of the kiln's machine
     server_time = models.DateTimeField(
         auto_now_add=True

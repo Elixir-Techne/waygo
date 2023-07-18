@@ -265,3 +265,17 @@ class StatusReportViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixi
             return StatusReport.objects.all()
         qs = StatusReport.objects.filter(company=self.request.user.appuser.company)
         return qs
+
+    @swagger_auto_schema(responses={200: ''}, )
+    @action(
+        detail=False, methods=['get'], url_name='chamber_latest_status', url_path='chamber-latest-status'
+    )
+    def chamber_latest_status(self, request):
+        distinct_chambers = StatusReport.objects.filter(
+            company=self.request.user.appuser.company
+        ).values('chamber').distinct()
+        latest_chamber_status = []
+        for chamber in distinct_chambers:
+            latest = StatusReport.objects.filter(chamber=chamber.get('chamber')).order_by('server_time').last()
+            latest_chamber_status.append(latest)
+        return Response(self.get_serializer(instance=latest_chamber_status, many=True).data, status=status.HTTP_200_OK)

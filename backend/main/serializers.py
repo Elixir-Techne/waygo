@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, CharField
 
 from main.models import Lot, LotData, StatusReport, AppUser, Company
@@ -42,7 +43,15 @@ class LotDataSerializer(ModelSerializer):
 
 
 class StatusReportSerializer(ModelSerializer):
+    lot = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = StatusReport
         fields = '__all__'
+
+    def get_lot(self, instance):
+        lot = None
+        if instance.lot_id:
+            lot_instance = Lot.objects.get(id=instance.lot_id)
+            lot = LotSerializer(instance=lot_instance, many=False).data
+        return lot
