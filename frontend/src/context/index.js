@@ -72,7 +72,7 @@ function ArgonControllerProvider({ children }) {
     darkSidenav: false,
     sidenavColor: null,
     transparentNavbar: true,
-    fixedNavbar: false,
+    fixedNavbar: true,
     openConfigurator: false,
     direction: "ltr",
     layout: "dashboard",

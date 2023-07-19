@@ -164,6 +164,9 @@ export default createTheme({
         root: {
           color: "white",
         },
+        select: {
+          width: "auto !important",
+        },
         actions: {
           color: "white",
         },

@@ -57,7 +57,6 @@ function Sidenav({ color, brand, brandName, ...rest }) {
   const { miniSidenav, darkSidenav, layout } = controller;
   const location = useLocation();
   const { pathname } = location;
-  const itemName = pathname.split("/").slice(1)[0];
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
@@ -83,7 +82,7 @@ function Sidenav({ color, brand, brandName, ...rest }) {
   const renderRoutes = routes.map(({ path, title }) => {
     return (
       <Link href={path} key={path} rel="noreferrer">
-        <SidenavItem name={title} active={path === itemName} />
+        <SidenavItem name={title} active={pathname === path} />
       </Link>
     );
   });

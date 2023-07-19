@@ -1,20 +1,6 @@
-/* eslint-disable no-nested-ternary */
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 function item(theme, ownerState) {
-  const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
+  const { palette, transitions, breakpoints, boxShadows, borders, functions } =
+    theme;
   const { active, darkSidenav, sidenavColor, miniSidenav } = ownerState;
 
   const { dark, text, transparent, white } = palette;
@@ -99,13 +85,13 @@ const itemIcon = ({ palette: { white, gradients } }, { active }) => ({
 
 function itemText(theme, ownerState) {
   const { typography, transitions, breakpoints, functions } = theme;
-  const { miniSidenav, active } = ownerState;
+  const { miniSidenav, active, darkSidenav } = ownerState;
 
   const { size, fontWeightMedium, fontWeightRegular } = typography;
   const { pxToRem } = functions;
 
   return {
-    color: "inherit",
+    color: "black",
     marginLeft: pxToRem(4),
 
     [breakpoints.up("xl")]: {
@@ -119,7 +105,7 @@ function itemText(theme, ownerState) {
     },
 
     "& span": {
-      color: "inherit",
+      color: darkSidenav ? "#fff" : "#000",
       fontWeight: active ? fontWeightMedium : fontWeightRegular,
       fontSize: size.sm,
       lineHeight: 0,

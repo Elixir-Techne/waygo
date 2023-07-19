@@ -60,14 +60,14 @@ export default function App() {
   //         return Promise.resolve();
   //       })
   //       .catch((e) => {
-  //         // removeAuthToken(); 
-  //         // window.location.href = "/sign-in";
-  //         // return Promise.reject(e);
+  //         removeAuthToken();
+  //         window.location.href = "/sign-in";
+  //         return Promise.reject(e);
   //       });
 
   //   // Instantiate the interceptor
   //   createAuthRefreshInterceptor(httpService, refreshAuthLogic);
-  //}, []);
+  // }, []);
 
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>

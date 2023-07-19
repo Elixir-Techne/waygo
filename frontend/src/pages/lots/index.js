@@ -6,10 +6,20 @@ import moment from "moment";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Endpoints } from "utils/httpServices";
+import { LotsDataTable } from "./components/DataTable";
+import { LotsDataPlot } from "./components/DataPlot";
 
 export const Lots = () => {
   const location = useLocation();
   const [view, setView] = useState("all");
+  const [lotID, setLotID] = useState("");
+  const[lotData,setLotData]=useState({})
+
+  const [paginationModel, setPaginationModel] = React.useState({
+    pageSize: 25,
+    page: 0,
+  });
+
   const { data, isLoading } = useQuery(
     location.pathname === "/ongoing-lots"
       ? [Endpoints.ongoingLots]
@@ -37,7 +47,6 @@ export const Lots = () => {
     {
       field: "program_name",
       headerName: "Program",
-      type: "number",
       flex: 1,
       sortable: false,
     },
@@ -72,8 +81,22 @@ export const Lots = () => {
       width: 350,
       renderCell: ({ row }) => (
         <ArgonBox gap="10px">
-          <ArgonButton>Data table</ArgonButton>
-          <ArgonButton>Data plot</ArgonButton>
+          <ArgonButton
+            onClick={() => {
+              setView("table");
+              setLotID(row?.id);
+            }}
+          >
+            Data table
+          </ArgonButton>
+          <ArgonButton
+            onClick={() => {
+              setView("plot");
+              setLotData(row)
+            }}
+          >
+            Data plot
+          </ArgonButton>
         </ArgonBox>
       ),
     },
@@ -82,22 +105,23 @@ export const Lots = () => {
   const renderContent = () => {
     switch (view) {
       case "table":
-        return null;
+        return <LotsDataTable lotID={lotID} />;
       case "plot":
-        return null;
+        return <LotsDataPlot lotData={lotData} />;
       default:
         return (
           <DataGrid
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
             rows={data || []}
             columns={columns}
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: 5,
+                  pageSize: 10,
                 },
               },
             }}
-            pageSizeOptions={[5]}
             disableRowSelectionOnClick
           />
         );
@@ -105,7 +129,7 @@ export const Lots = () => {
   };
 
   return (
-    <ArgonBox sx={{ height: 400, width: "100%" }} mt={8}>
+    <ArgonBox sx={{ height: "100%", width: "100%" }} mt={8}>
       {renderContent()}
     </ArgonBox>
   );

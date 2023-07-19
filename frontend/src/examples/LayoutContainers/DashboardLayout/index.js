@@ -12,6 +12,7 @@ import ArgonBox from "components/ArgonBox";
 
 // Argon Dashboard 2 MUI context
 import { useArgonController, setLayout } from "context";
+import Sidenav from "examples/Sidenav";
 
 function DashboardLayout({ bgColor, children, ...rest }) {
   const [controller, dispatch] = useArgonController();
@@ -28,7 +29,7 @@ function DashboardLayout({ bgColor, children, ...rest }) {
     <ArgonBox
       sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
         p: 3,
-
+        height: "100vh",
         [breakpoints.up("xl")]: {
           marginLeft: miniSidenav ? pxToRem(120) : pxToRem(274),
           transition: transitions.create(["margin-left", "margin-right"], {

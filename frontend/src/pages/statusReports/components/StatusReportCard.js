@@ -1,10 +1,15 @@
 import { Card, CardContent, CardHeader } from "@mui/material";
+import { typography } from "@mui/system";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import React from "react";
 import { Controller } from "swiper";
 import { getChamberStatus } from "utils/helper";
 
+const typographyProps = {
+  fontWeight: "medium",
+  color: "white",
+};
 const StatusReportCard = ({ data }) => {
   const { darkMode } = Controller;
   return (
@@ -21,47 +26,31 @@ const StatusReportCard = ({ data }) => {
       <CardHeader
         sx={{ textAlign: "center" }}
         title={
-          <ArgonTypography fontWeight="medium" color="white">
+          <ArgonTypography {...typographyProps}>
             Chamber {data.chamber}
           </ArgonTypography>
         }
       />
       <CardContent>
-        <ArgonTypography fontWeight="medium" color="white">
-          Last Report:
-        </ArgonTypography>
-        <ArgonTypography fontWeight="medium" color="white">
+        <ArgonTypography {...typographyProps}>Last Report:</ArgonTypography>
+        <ArgonTypography {...typographyProps}>
           Status: {getChamberStatus(data?.lot?.status_code)}
         </ArgonTypography>
-        <ArgonTypography fontWeight="medium" color="white">
+        <ArgonTypography {...typographyProps}>
           Species: {data?.lot?.species}
         </ArgonTypography>
-        <ArgonTypography fontWeight="medium" color="white">
+        <ArgonTypography {...typographyProps}>
           Quantity: {data?.lot?.quantity}
         </ArgonTypography>
-        <ArgonTypography fontWeight="medium" color="white">
-          RH:
-        </ArgonTypography>
+        <ArgonTypography {...typographyProps}>RH:</ArgonTypography>
         <ArgonBox display="flex" justifyContent="space-between">
-          <ArgonTypography fontWeight="medium" color="white">
-            DBTI:
-          </ArgonTypography>
-          <ArgonTypography fontWeight="medium" color="white">
-            WBTI:
-          </ArgonTypography>
+          <ArgonTypography {...typographyProps}>DBTI:</ArgonTypography>
+          <ArgonTypography {...typographyProps}>WBTI:</ArgonTypography>
         </ArgonBox>
-        <ArgonTypography fontWeight="medium" color="white">
-          AMC:
-        </ArgonTypography>
-        <ArgonTypography fontWeight="medium" color="white">
-          Current Command:
-        </ArgonTypography>
-        <ArgonTypography fontWeight="medium" color="white">
-          Start time:
-        </ArgonTypography>
-        <ArgonTypography fontWeight="medium" color="white">
-          Time ellapsed:
-        </ArgonTypography>
+        <ArgonTypography {...typographyProps}>AMC:</ArgonTypography>
+        <ArgonTypography {...typographyProps}>Current Command:</ArgonTypography>
+        <ArgonTypography {...typographyProps}>Start time:</ArgonTypography>
+        <ArgonTypography {...typographyProps}>Time ellapsed:</ArgonTypography>
       </CardContent>
     </Card>
   );

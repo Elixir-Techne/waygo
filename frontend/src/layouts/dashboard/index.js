@@ -7,6 +7,7 @@ import { useArgonController, setMiniSidenav } from "context";
 import { useState } from "react";
 import { routes } from "routes";
 import waygoPng from "assets/images/waygo.png";
+import { Box } from "@mui/material";
 
 function Default() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
@@ -29,7 +30,7 @@ function Default() {
     }
   };
 
-    const handleOnMouseLeave = () => {
+  const handleOnMouseLeave = () => {
     if (onMouseEnter) {
       setMiniSidenav(dispatch, true);
       setOnMouseEnter(false);
@@ -46,8 +47,9 @@ function Default() {
           onMouseLeave={handleOnMouseLeave}
         />
         <DashboardNavbar />
-        <Outlet />
-        <Footer />
+        <Box height="calc(100%-100px)">
+          <Outlet />
+        </Box>
       </DashboardLayout>
     </>
   );

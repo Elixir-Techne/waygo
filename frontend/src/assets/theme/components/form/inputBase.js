@@ -30,7 +30,6 @@ const inputBase = {
     root: {
       display: "flex !important",
       alignItems: "center !important",
-      width: "100% !important",
       height: "auto !important",
       padding: `${pxToRem(8)} ${pxToRem(12)}`,
       fontSize: `${size.sm} !important`,
@@ -42,7 +41,8 @@ const inputBase = {
       border: `${borderWidth[1]} solid ${inputColors.borderColor.main}`,
       appearance: "none !important",
       borderRadius: borderRadius.md,
-      transition: "box-shadow 150ms ease, border-color 150ms ease, padding 150ms ease !important",
+      transition:
+        "box-shadow 150ms ease, border-color 150ms ease, padding 150ms ease !important",
     },
 
     input: {

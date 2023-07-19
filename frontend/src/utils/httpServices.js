@@ -38,4 +38,5 @@ export const Endpoints = {
   statusReport: "/status-report/chamber-latest-status/",
   ongoingLots: "/lots/ongoing-lot/",
   historicalLots: "/lots/historical-lot/",
+  lots:"lots/"
 };

@@ -131,6 +131,7 @@ function SignIn() {
               <ArgonButton
                 variant="gradient"
                 color="dark"
+                type="submit"
                 fullWidth
                 onClick={handleSubmit}
               >
