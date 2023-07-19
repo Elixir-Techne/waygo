@@ -15,7 +15,7 @@ from rest_framework.response import Response
 
 from main.filters import LotFilterSet
 from main.models import Lot, LotData, StatusReport
-from main.serializers import LotSerializer, LotDataSerializer, StatusReportSerializer
+from main.serializers import LotSerializer, LotDataSerializer, StatusReportSerializer, StatusReportListSerializer
 
 
 @require_GET
@@ -258,13 +258,17 @@ class LotDataViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
 class StatusReportViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin):
     permission_classes = (permissions.IsAuthenticated, )
-    serializer_class = StatusReportSerializer
 
     def get_queryset(self):
         if self.request.user.is_superuser:
             return StatusReport.objects.all()
         qs = StatusReport.objects.filter(company=self.request.user.appuser.company)
         return qs
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return StatusReportSerializer
+        return StatusReportListSerializer
 
     @swagger_auto_schema(responses={200: ''}, )
     @action(

@@ -42,8 +42,9 @@ class LotDataSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class StatusReportSerializer(ModelSerializer):
+class StatusReportListSerializer(ModelSerializer):
     lot = serializers.SerializerMethodField(read_only=True)
+    latest_lot_data = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = StatusReport
@@ -55,3 +56,18 @@ class StatusReportSerializer(ModelSerializer):
             lot_instance = Lot.objects.get(id=instance.lot_id)
             lot = LotSerializer(instance=lot_instance, many=False).data
         return lot
+
+    def get_latest_lot_data(self, instance):
+        lot_data = None
+        if instance.lot_id:
+            lot_data = LotData.objects.filter(
+                lot_id=instance.lot_id, lot_id__chamber=instance.chamber
+            ).order_by('-time')
+            lot_data = LotDataSerializer(instance=lot_data.first(), many=False).data
+        return lot_data
+
+
+class StatusReportSerializer(ModelSerializer):
+    class Meta:
+        model = StatusReport
+        fields = '__all__'
