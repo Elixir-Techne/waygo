@@ -23,32 +23,46 @@ import SidenavItem from "examples/Sidenav/SidenavItem";
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
 
+//mui icon
+import SummarizeIcon from "@mui/icons-material/Summarize";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import HistoryIcon from "@mui/icons-material/History";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import ComputerIcon from "@mui/icons-material/Computer";
+import HelpCenterIcon from "@mui/icons-material/HelpCenter";
+
 // Argon Dashboard 2 MUI context
 import { useArgonController, setMiniSidenav } from "context";
 
 const routes = [
   {
     title: "Status Reports",
+    icon: <SummarizeIcon />,
     path: "/",
   },
   {
     title: "Ongoing Lots",
+    icon: <PrecisionManufacturingIcon />,
     path: "/ongoing-lots",
   },
   {
     title: "Historical Lots",
+    icon: <HistoryIcon />,
     path: "/historical-lots",
   },
   {
     title: "Statistics",
+    icon: <AssessmentIcon />,
     path: "/statistics",
   },
   {
     title: "Technology",
+    icon: <ComputerIcon />,
     path: "/technology",
   },
   {
     title: "Help",
+    icon: <HelpCenterIcon />,
     path: "/help",
   },
 ];
@@ -79,10 +93,14 @@ function Sidenav({ color, brand, brandName, ...rest }) {
   }, [dispatch, location]);
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
-  const renderRoutes = routes.map(({ path, title }) => {
+  const renderRoutes = routes.map((item) => {
     return (
-      <Link href={path} key={path} rel="noreferrer">
-        <SidenavItem name={title} active={pathname === path} />
+      <Link href={item.path} key={item.path} rel="noreferrer">
+        <SidenavItem
+          name={item.title}
+          active={pathname === item.path}
+          icon={item.icon}
+        />
       </Link>
     );
   });
@@ -93,7 +111,7 @@ function Sidenav({ color, brand, brandName, ...rest }) {
       variant="permanent"
       ownerState={{ darkSidenav, miniSidenav, layout }}
     >
-      <ArgonBox pt={3} pb={1} px={4} textAlign="center">
+      <ArgonBox pt={3} pb={1} px={5} textAlign="center">
         <ArgonBox
           display={{ xs: "block", xl: "none" }}
           position="absolute"

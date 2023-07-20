@@ -52,7 +52,7 @@ import { getUser } from "utils/helper";
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useArgonController();
-  const {user,company} = getUser()
+  const { user, company } = getUser();
 
   const {
     miniSidenav,
@@ -111,48 +111,68 @@ function DashboardNavbar({ absolute, light, isMini }) {
       color="inherit"
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
     >
-      <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
-        <ArgonBox
-          color={light && transparentNavbar ? "white" : "dark"}
-          mb={{ xs: 1, md: 0 }}
-          sx={(theme) => navbarRow(theme, { isMini })}
-        ></ArgonBox>
-        {isMini ? null : (
-          <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <ArgonTypography
-              variant="button"
-              fontWeight="medium"
-              color={light && transparentNavbar ? "white" : "dark"}
-            >
-              {user.username}
-            </ArgonTypography>
-            <ArgonTypography
-              variant="button"
-              fontWeight="medium"
-              color={light && transparentNavbar ? "white" : "dark"}
-            >
-              {company.name}
-            </ArgonTypography>
-            <ArgonTypography
-              variant="button"
-              fontWeight="medium"
-              color={light && transparentNavbar ? "white" : "dark"}
-            >
-              EN/VI
-            </ArgonTypography>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <DarkModeSwitcher checked={darkMode} onChange={handleDarkMode} />
+      <ArgonBox
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Icon
+          fontSize="medium"
+          sx={navbarDesktopMenu}
+          onClick={handleMiniSidenav}
+        >
+          {!miniSidenav ? "menu_open" : "menu"}
+        </Icon>
+        <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
+          {/* <ArgonBox
+            color={light && transparentNavbar ? "white" : "dark"}
+            mb={{ xs: 1, md: 0 }}
+            sx={(theme) => navbarRow(theme, { isMini })}
+          ></ArgonBox> */}
+
+          {isMini ? null : (
+            <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
               <ArgonTypography
                 variant="button"
                 fontWeight="medium"
                 color={light && transparentNavbar ? "white" : "dark"}
               >
-                Dark Mode
+                {user.username}
               </ArgonTypography>
-            </Stack>
-          </ArgonBox>
-        )}
-      </Toolbar>
+              <ArgonTypography
+                variant="button"
+                fontWeight="medium"
+                color={light && transparentNavbar ? "white" : "dark"}
+              >
+                {company.name}
+              </ArgonTypography>
+              <ArgonTypography
+                variant="button"
+                fontWeight="medium"
+                color={light && transparentNavbar ? "white" : "dark"}
+              >
+                EN/VI
+              </ArgonTypography>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <DarkModeSwitcher
+                  checked={darkMode}
+                  onChange={handleDarkMode}
+                />
+                <ArgonTypography
+                  variant="button"
+                  fontWeight="medium"
+                  color={light && transparentNavbar ? "white" : "dark"}
+                >
+                  Dark Mode
+                </ArgonTypography>
+              </Stack>
+            </ArgonBox>
+          )}
+        </Toolbar>
+      </ArgonBox>
     </AppBar>
   );
 }

@@ -4,16 +4,17 @@ import ArgonBox from "components/ArgonBox";
 import ArgonButton from "components/ArgonButton";
 import moment from "moment";
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Endpoints } from "utils/httpServices";
 import { LotsDataTable } from "./components/DataTable";
 import { LotsDataPlot } from "./components/DataPlot";
 
 export const Lots = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const [view, setView] = useState("all");
   const [lotID, setLotID] = useState("");
-  const[lotData,setLotData]=useState({})
+  const [lotData, setLotData] = useState({});
 
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 25,
@@ -30,61 +31,69 @@ export const Lots = () => {
   );
 
   const columns = [
-    { field: "chamber", headerName: "Chamber", flex: 1 },
+    { field: "chamber", headerName: "Chamber", width: 90 },
     {
       field: "id",
       headerName: "Lot ID",
-      flex: 1,
+      // flex: 1,
+      width: 155,
       sortable: false,
     },
     {
       field: "start_time",
       headerName: "Start Time",
-      flex: 1,
+      // flex: 1,
+      width: 130,
       sortable: false,
       renderCell: ({ row }) => moment(row.start_time).format("YYYY-MM-DD"),
     },
     {
       field: "program_name",
       headerName: "Program",
-      flex: 1,
+      // flex: 1,
+      width: 210,
       sortable: false,
     },
     {
       field: "total_commands",
       headerName: "Commands",
       sortable: false,
-      flex: 1,
+      // flex: 1,
+      width: 110,
     },
     {
       field: "species",
       headerName: "Species",
       sortable: false,
-      flex: 1,
+      // flex: 1,
+      width: 135,
     },
     {
       field: "quantity",
       headerName: "Quantity",
       sortable: false,
-      flex: 1,
+      // flex: 1,
+      width: 110,
     },
     {
       field: "duration",
       headerName: "Ellapsed",
       sortable: false,
-      flex: 1,
+      // flex: 1,
+      width: 140,
     },
     {
       field: "actions",
       type: "actions",
       sortable: false,
-      width: 350,
+      width: 290,
       renderCell: ({ row }) => (
-        <ArgonBox gap="10px">
+        <ArgonBox gap="10px" sx={{ width: "100%", display: "flex" }}>
           <ArgonButton
             onClick={() => {
               setView("table");
               setLotID(row?.id);
+              navigate(`/ongoing-lots/data/${row?.id}`);
             }}
           >
             Data table
@@ -92,7 +101,8 @@ export const Lots = () => {
           <ArgonButton
             onClick={() => {
               setView("plot");
-              setLotData(row)
+              setLotData(row);
+              navigate(`/ongoing-lots/data/${row?.id}`);
             }}
           >
             Data plot
@@ -105,9 +115,9 @@ export const Lots = () => {
   const renderContent = () => {
     switch (view) {
       case "table":
-        return <LotsDataTable lotID={lotID} />;
+        return <LotsDataTable lotID={lotID} setView={setView} />;
       case "plot":
-        return <LotsDataPlot lotData={lotData} />;
+        return <LotsDataPlot lotData={lotData} setView={setView} />;
       default:
         return (
           <DataGrid

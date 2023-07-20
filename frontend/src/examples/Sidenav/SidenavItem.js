@@ -19,7 +19,7 @@ import {
 // Argon Dashboard 2 MUI context
 import { useArgonController } from "context";
 
-function SidenavItem({ name, active, open, ...rest }) {
+function SidenavItem({ icon, name, active, open, ...rest }) {
   const [controller] = useArgonController();
   const { miniSidenav, darkSidenav, sidenavColor } = controller;
 
@@ -36,7 +36,9 @@ function SidenavItem({ name, active, open, ...rest }) {
             sx={(theme) =>
               itemIconBox(theme, { active, darkSidenav, sidenavColor })
             }
-          ></ListItemIcon>
+          >
+            {icon}
+          </ListItemIcon>
 
           <ListItemText
             primary={name}
@@ -59,7 +61,15 @@ SidenavItem.defaultProps = {
 
 // Typechecking props for the SidenavItem
 SidenavItem.propTypes = {
-  color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
+  color: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "info",
+    "success",
+    "warning",
+    "error",
+    "dark",
+  ]),
   icon: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
   active: PropTypes.bool,

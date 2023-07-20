@@ -17,6 +17,9 @@ import { Controller } from "swiper";
 import "chartjs-plugin-zoom";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArgonButton from "components/ArgonButton";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(
   CategoryScale,
@@ -30,7 +33,8 @@ ChartJS.register(
 
 const keys = ["rh", "amc"];
 
-export const LotsDataPlot = ({ lotData }) => {
+export const LotsDataPlot = ({ lotData, setView }) => {
+  const navigate = useNavigate();
   const { darkMode } = Controller;
   const [series, setSeries] = useState([]);
 
@@ -67,6 +71,15 @@ export const LotsDataPlot = ({ lotData }) => {
 
   return (
     <ArgonBox>
+      <ArgonButton
+        onClick={() => {
+          setView("all");
+          navigate("/ongoing-lots");
+        }}
+      >
+        <ArrowBackIosIcon />
+        Back
+      </ArgonButton>
       <Chart
         options={{
           chart: { type: "bar" },
