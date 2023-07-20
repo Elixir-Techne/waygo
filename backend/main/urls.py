@@ -11,6 +11,7 @@ main_router.register(r'lots-data', views.LotDataViewSet, 'lots-data')
 main_router.register(r'status-report', views.StatusReportViewSet, 'status-report')
 urlpatterns = [
     path('', include(main_router.urls)),
+    path('statistic/', views.statistic),
     # path("lots/", views.get_all_lots, name="get_all_lots"),
     # path("lots/time/", views.get_lots_in_time_period, name="get_lots_in_time_period"),
     # path("lots/species/", views.get_lots_by_species, name="get_lots_by_species"),
