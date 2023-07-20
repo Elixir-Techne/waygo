@@ -61,7 +61,12 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
         overflow: "visible",
       }}
     >
-      <ArgonBox position="relative" width="100.25%" shadow="md" borderRadius="xl">
+      <ArgonBox
+        position="relative"
+        width="100.25%"
+        shadow="md"
+        borderRadius="xl"
+      >
         <CardMedia
           src={image}
           component="img"
@@ -80,63 +85,15 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
           variant="button"
           fontWeight="regular"
           textTransform="capitalize"
-          textGradient
+          color="text"
         >
           {label}
         </ArgonTypography>
-        <ArgonBox mb={1}>
-          {action.type === "internal" ? (
-            <ArgonTypography
-              component={Link}
-              to={action.route}
-              variant="h5"
-              textTransform="capitalize"
-            >
-              {title}
-            </ArgonTypography>
-          ) : (
-            <ArgonTypography
-              component="a"
-              href={action.route}
-              target="_blank"
-              rel="noreferrer"
-              variant="h5"
-              textTransform="capitalize"
-            >
-              {title}
-            </ArgonTypography>
-          )}
-        </ArgonBox>
+
         <ArgonBox mb={3} lineHeight={0}>
           <ArgonTypography variant="button" fontWeight="regular" color="text">
             {description}
           </ArgonTypography>
-        </ArgonBox>
-        <ArgonBox display="flex" justifyContent="space-between" alignItems="center">
-          {action.type === "internal" ? (
-            <ArgonButton
-              component={Link}
-              to={action.route}
-              variant="outlined"
-              size="small"
-              color={action.color}
-            >
-              {action.label}
-            </ArgonButton>
-          ) : (
-            <ArgonButton
-              component="a"
-              href={action.route}
-              target="_blank"
-              rel="noreferrer"
-              variant="outlined"
-              size="small"
-              color={action.color}
-            >
-              {action.label}
-            </ArgonButton>
-          )}
-          <ArgonBox display="flex">{renderAuthors}</ArgonBox>
         </ArgonBox>
       </ArgonBox>
     </Card>

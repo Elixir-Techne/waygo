@@ -31,7 +31,7 @@ ChartJS.register(
   Legend
 );
 
-const keys = ["rh", "amc"];
+const keys = ["rh", "amc", "wbt1", "dbt1", "wood_temp1"];
 
 export const LotsDataPlot = ({ lotData, setView }) => {
   const navigate = useNavigate();
@@ -76,20 +76,31 @@ export const LotsDataPlot = ({ lotData, setView }) => {
           setView("all");
           navigate("/ongoing-lots");
         }}
+        sx={{ marginBottom: 2 }}
       >
         <ArrowBackIosIcon />
         Back
       </ArgonButton>
       <Chart
+        height="500px"
         options={{
-          chart: { type: "bar" },
+          theme: {
+            mode: darkMode ? "light" : "dark",
+            palette: "#fff",
+          },
+          chart: {
+            type: "line",
+            width: "100%",
+            height: 400,
+          },
           stroke: {
             curve: "smooth",
           },
           xaxis: {
             type: "datetime",
           },
-          colors: ["#2E93fA", "#66DA26", "#546E7A", "#E91E63", "#FF9800"],
+
+          colors: ["#2E93fA", "#66DA26", "#546E7A", "#7be3af", "#c5206ab5"],
         }}
         series={series}
       />
