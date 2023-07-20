@@ -22,6 +22,8 @@ import ArgonInput from "components/ArgonInput";
 import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
 
+import PublicIcon from "@mui/icons-material/Public";
+
 // Custom styles for DashboardNavbar
 import {
   navbar,
@@ -44,13 +46,21 @@ import {
 import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import DarkModeSwitcher from "components/DarkModeSwitcher";
-import { FormControlLabel, Stack } from "@mui/material";
+import {
+  Button,
+  FormControlLabel,
+  MenuItem,
+  Select,
+  Stack,
+} from "@mui/material";
 import { setDarkSidenav } from "context";
 import { setDarkMode } from "context";
 import { getUser } from "utils/helper";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   const [controller, dispatch] = useArgonController();
   const { user, company } = getUser();
 
@@ -104,6 +114,13 @@ function DashboardNavbar({ absolute, light, isMini }) {
     setDarkSidenav(dispatch, !darkMode);
     setDarkMode(dispatch, !darkMode);
   };
+  const handleGlobal = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(!anchorEl);
+  };
 
   return (
     <AppBar
@@ -119,13 +136,24 @@ function DashboardNavbar({ absolute, light, isMini }) {
           alignItems: "center",
         }}
       >
-        <Icon
-          fontSize="medium"
-          sx={navbarDesktopMenu}
-          onClick={handleMiniSidenav}
-        >
-          {!miniSidenav ? "menu_open" : "menu"}
-        </Icon>
+        <ArgonBox display="flex" flexDirection="row-reverse">
+          <Breadcrumbs
+            icon="home"
+            title={route[route.length - 1]}
+            route={route}
+            light={transparentNavbar ? light : false}
+          />
+          <Icon
+            fontSize="medium"
+            sx={
+              (navbarDesktopMenu,
+              { color: !darkMode ? "black" : "lightgray", marginRight: "1rem" })
+            }
+            onClick={handleMiniSidenav}
+          >
+            {!miniSidenav ? "menu_open" : "menu"}
+          </Icon>
+        </ArgonBox>
         <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
           {/* <ArgonBox
             color={light && transparentNavbar ? "white" : "dark"}
@@ -139,6 +167,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 variant="button"
                 fontWeight="medium"
                 color={light && transparentNavbar ? "white" : "dark"}
+                fontSize="1.3rem"
               >
                 {user.username}
               </ArgonTypography>
@@ -146,6 +175,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 variant="button"
                 fontWeight="medium"
                 color={light && transparentNavbar ? "white" : "dark"}
+                fontSize="1.3rem"
               >
                 {company.name}
               </ArgonTypography>
@@ -154,7 +184,42 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 fontWeight="medium"
                 color={light && transparentNavbar ? "white" : "dark"}
               >
-                EN/VI
+                <IconButton
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleGlobal}
+                >
+                  <PublicIcon
+                    fontSize="medium"
+                    sx={{
+                      cursor: "pointer",
+                      color: "lightgray",
+                      fontWeight: "bold",
+                    }}
+                  />
+                </IconButton>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                  sx={{
+                    width: "6rem",
+                    "& . hover": {
+                      width: "10rem",
+                    },
+                  }}
+                >
+                  <MenuItem onClick={handleClose} sx={{ width: "100%" }}>
+                    EN
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>VI</MenuItem>
+                </Menu>
               </ArgonTypography>
               <Stack direction="row" spacing={1} alignItems="center">
                 <DarkModeSwitcher
@@ -165,6 +230,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   variant="button"
                   fontWeight="medium"
                   color={light && transparentNavbar ? "white" : "dark"}
+                  fontSize="1rem"
                 >
                   Dark Mode
                 </ArgonTypography>

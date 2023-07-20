@@ -1,32 +1,47 @@
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarContainer,
+  GridToolbarExport,
+} from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
 import ArgonBox from "components/ArgonBox";
 import ArgonButton from "components/ArgonButton";
 import moment from "moment";
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Endpoints } from "utils/httpServices";
 import { LotsDataTable } from "./components/DataTable";
 import { LotsDataPlot } from "./components/DataPlot";
+import Loader from "examples/Loader";
+import ExportToolBar from "examples/ExportToolBar";
 
 export const Lots = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [view, setView] = useState("all");
-  const [lotID, setLotID] = useState("");
-  const [lotData, setLotData] = useState({});
+  const { id, view } = useParams();
 
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 25,
     page: 0,
   });
+  const name = location.pathname.split("/").slice(1);
+
+  const url =
+    location.pathname === "/ongoing-lots"
+      ? Endpoints.ongoingLots
+      : Endpoints.historicalLots;
 
   const { data, isLoading } = useQuery(
-    location.pathname === "/ongoing-lots"
-      ? [Endpoints.ongoingLots]
-      : [Endpoints.historicalLots],
+    [
+      url,
+      {
+        page: paginationModel.page + 1,
+        page_size: paginationModel.pageSize,
+      },
+    ],
     {
-      enabled: true,
+      enabled: !id,
     }
   );
 
@@ -91,18 +106,14 @@ export const Lots = () => {
         <ArgonBox gap="10px" sx={{ width: "100%", display: "flex" }}>
           <ArgonButton
             onClick={() => {
-              setView("table");
-              setLotID(row?.id);
-              navigate(`/ongoing-lots/data/${row?.id}`);
+              navigate(`/${name[0]}/data/${row?.id}`);
             }}
           >
             Data table
           </ArgonButton>
           <ArgonButton
             onClick={() => {
-              setView("plot");
-              setLotData(row);
-              navigate(`/ongoing-lots/data/${row?.id}`);
+              navigate(`/${name[0]}/plot/${row?.id}`);
             }}
           >
             Data plot
@@ -114,26 +125,30 @@ export const Lots = () => {
 
   const renderContent = () => {
     switch (view) {
-      case "table":
-        return <LotsDataTable lotID={lotID} setView={setView} />;
+      case "data":
+        return <LotsDataTable lotID={id} />;
       case "plot":
-        return <LotsDataPlot lotData={lotData} setView={setView} />;
+        return <LotsDataPlot lotID={id} />;
       default:
         return (
-          <DataGrid
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            rows={data || []}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 10,
-                },
-              },
-            }}
-            disableRowSelectionOnClick
-          />
+          <>
+            {/* <ArgonBox mb={2} display="flex" justifyContent="end">
+              <ArgonButton onClick={handlePrint}>Print</ArgonButton>
+            </ArgonBox> */}
+            <DataGrid
+              rows={data?.results || []}
+              columns={columns}
+              loading={isLoading}
+              disableRowSelectionOnClick
+              sx={{ overflowY: "auto" }}
+              rowCount={data?.count || 0}
+              paginationMode="server"
+              pageSizeOptions={[25, 50, 100]}
+              paginationModel={paginationModel}
+              onPaginationModelChange={setPaginationModel}
+              slots={{ toolbar: ExportToolBar }}
+            />
+          </>
         );
     }
   };

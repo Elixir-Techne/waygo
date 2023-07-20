@@ -111,7 +111,6 @@ const navbarIconButton = ({ typography: { size }, breakpoints }) => ({
 
 const navbarDesktopMenu = ({ breakpoints }) => ({
   cursor: "pointer",
-
   [breakpoints.up("xl")]: {
     display: "inline-block !important",
   },

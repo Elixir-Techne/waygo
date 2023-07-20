@@ -33,7 +33,7 @@ ChartJS.register(
 
 const keys = ["rh", "amc"];
 
-export const LotsDataPlot = ({ lotData, setView }) => {
+export const LotsDataPlot = ({ lotID }) => {
   const navigate = useNavigate();
   const { darkMode } = Controller;
   const [series, setSeries] = useState([]);
@@ -42,16 +42,12 @@ export const LotsDataPlot = ({ lotData, setView }) => {
     fontWeight: "medium",
     color: darkMode ? "#fff" : "#000",
   };
-  const { data, isLoading } = useQuery(
-    [`${Endpoints.lots}${lotData.id}/lot-data/`],
+  const { data, isLoading } = useQuery([`${Endpoints.lots}${lotID}/lot-data/`]);
+  const { data: lotData } = useQuery([`${Endpoints.lots}${lotID}/`]);
 
-    {
-      enabled: true,
-    }
-  );
   useEffect(() => {
     if (data) {
-      const temp = data?.reduce((acc, curr) => {
+      const temp = data?.results?.reduce((acc, curr) => {
         keys.forEach((key) => {
           const obj = {
             x: moment(curr.time).format("YYYY-MM-DD"),
@@ -68,13 +64,14 @@ export const LotsDataPlot = ({ lotData, setView }) => {
       setSeries(Object.entries(temp).map(([k, v]) => ({ name: k, data: v })));
     }
   }, [data]);
-
+  if (isLoading) {
+    return <h1>loading...</h1>;
+  }
   return (
     <ArgonBox>
       <ArgonButton
         onClick={() => {
-          setView("all");
-          navigate("/ongoing-lots");
+          navigate(-1);
         }}
       >
         <ArrowBackIosIcon />

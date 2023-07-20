@@ -35,7 +35,7 @@ const inputBase = {
       fontSize: `${size.sm} !important`,
       fontWeight: `${fontWeightRegular} !important`,
       lineHeight: "1.4 !important",
-      color: `${grey[700]} !important`,
+      color: "`${grey[700]} !important`",
       backgroundColor: `${white.main} !important`,
       backgroundClip: "padding-box !important",
       border: `${borderWidth[1]} solid ${inputColors.borderColor.main}`,

@@ -28,7 +28,7 @@ export const routes = (loggedIn = false) => [
         element: <Lots />,
       },
       {
-        path: "/ongoing-lots/data/:id",
+        path: "/:state/:view/:id",
         element: <Lots />,
       },
       {
