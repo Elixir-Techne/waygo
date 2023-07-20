@@ -43,6 +43,10 @@ export const routes = (loggedIn = false) => [
         path: "/technology",
         element: <Technology />,
       },
+      {
+        path: "/help",
+        element: <Technology />,
+      },
     ],
   },
 ];

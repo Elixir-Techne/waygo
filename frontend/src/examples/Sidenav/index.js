@@ -98,7 +98,10 @@ function Sidenav({ color, brand, brandName, ...rest }) {
       <Link href={item.path} key={item.path} rel="noreferrer">
         <SidenavItem
           name={item.title}
-          active={pathname === item.path}
+          active={
+            (pathname.includes(item.path) && item.path !== "/") ||
+            item.path === pathname
+          }
           icon={item.icon}
         />
       </Link>
