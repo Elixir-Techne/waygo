@@ -47,7 +47,7 @@ export const LotsDataPlot = ({ lotID }) => {
 
   useEffect(() => {
     if (data) {
-      const temp = data?.results?.reduce((acc, curr) => {
+      const temp = data?.reduce((acc, curr) => {
         keys.forEach((key) => {
           const obj = {
             x: moment(curr.time).format("YYYY-MM-DD"),
@@ -86,6 +86,7 @@ export const LotsDataPlot = ({ lotID }) => {
             palette: "#fff",
           },
           chart: {
+            background: "#fff",
             type: "line",
             width: "100%",
             height: 400,
