@@ -221,7 +221,7 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
     def lot_lotdata(self, request, pk=None):
         lot_data = LotData.objects.filter(lot_id=pk)
         lot_data = self.paginate_queryset(lot_data)
-        return self.get_paginated_response(self.get_serializer(instance=lot_data, many=True).data)
+        return self.get_paginated_response(LotDataSerializer(instance=lot_data, many=True).data)
 
     @swagger_auto_schema(responses={200: LotSerializer}, )
     @action(
