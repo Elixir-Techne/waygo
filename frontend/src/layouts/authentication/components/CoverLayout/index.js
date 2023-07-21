@@ -1,5 +1,3 @@
-
-
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
@@ -13,13 +11,17 @@ import ArgonTypography from "components/ArgonTypography";
 // Argon Dashboard 2 MUI example components
 import PageLayout from "examples/LayoutContainers/PageLayout";
 
-
-function CoverLayout({ title, description, image, imgPosition, button, children }) {
+function CoverLayout({
+  title,
+  description,
+  image,
+  imgPosition,
+  button,
+  children,
+}) {
   return (
     <PageLayout>
-      <ArgonBox mt={1}>
-      
-      </ArgonBox>
+      <ArgonBox mt={1}></ArgonBox>
       <ArgonBox
         width="calc(100% - 2rem)"
         minHeight="50vh"
@@ -33,15 +35,11 @@ function CoverLayout({ title, description, image, imgPosition, button, children 
           backgroundImage: ({
             functions: { linearGradient, rgba },
             palette: { gradients },
-          }) =>
-            image &&
-            `${linearGradient(
-              rgba(gradients.dark.main, 0.6),
-              rgba(gradients.dark.state, 0.6)
-            )}, url(${image})`,
-          backgroundSize: "cover",
-          backgroundPosition: imgPosition,
+          }) => image && `url(${image})`,
+          backgroundSize: "400px",
+          backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          mixBlendMode: "darken",
         }}
       >
         <Grid

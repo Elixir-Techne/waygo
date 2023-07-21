@@ -14,6 +14,7 @@ import { Endpoints } from "utils/httpServices";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
+import waygoPng from "assets/images/waygo.png";
 
 // Image
 const bgImage =
@@ -56,11 +57,12 @@ function SignIn() {
     <CoverLayout
       // title="Welcome!"
       // description="Use these awesome forms to login or create new account in your project for free."
-      image={bgImage}
+      image={waygoPng}
       imgPosition="top"
       button={{ color: "dark", variant: "gradient" }}
     >
       <Card>
+        <ArgonBox sx={{ backgroundImage: `url(${waygoPng})` }}></ArgonBox>
         <ArgonBox p={3} mb={1} textAlign="center">
           <ArgonTypography variant="h5" fontWeight="medium">
             Sign-In
