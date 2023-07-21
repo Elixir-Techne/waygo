@@ -6,15 +6,16 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets, permissions, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes, api_view
 from rest_framework.response import Response
 
 from main.filters import LotFilterSet
 from main.models import Lot, LotData, StatusReport
+from main.pagination import CustomPageNumberPagination
 from main.serializers import LotSerializer, LotDataSerializer, StatusReportSerializer, StatusReportListSerializer
 
 
@@ -201,6 +202,7 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
     permission_classes = (permissions.IsAuthenticated, )
     filter_backends = (DjangoFilterBackend, )
     filterset_class = LotFilterSet
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -218,7 +220,11 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
     )
     def lot_lotdata(self, request, pk=None):
         lot_data = LotData.objects.filter(lot_id=pk)
-        return Response(LotDataSerializer(instance=lot_data, many=True).data, status=status.HTTP_200_OK)
+        if self.request.query_params.get('get_all', 'False').lower() == 'true':
+            return Response(LotDataSerializer(instance=lot_data, many=True).data, status=status.HTTP_200_OK)
+        lot_data = self.paginate_queryset(lot_data)
+        data = self.get_paginated_response(LotDataSerializer(instance=lot_data, many=True).data)
+        return data
 
     @swagger_auto_schema(responses={200: LotSerializer}, )
     @action(
@@ -227,7 +233,11 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
     def ongoing_lot(self, request):
         three_months_ago = timezone.now() - timedelta(days=settings.DEFAULT_DAYS)
         ongoing_lot = Lot.objects.filter(complete_time__isnull=True, start_time__gte=three_months_ago)
-        return Response(self.get_serializer(instance=ongoing_lot, many=True).data, status=status.HTTP_200_OK)
+        if self.request.query_params.get('get_all', 'False').lower() == 'true':
+            return Response(self.get_serializer(instance=ongoing_lot, many=True).data, status=status.HTTP_200_OK)
+        ongoing_lot = self.paginate_queryset(ongoing_lot)
+        data = self.get_paginated_response(self.get_serializer(instance=ongoing_lot, many=True).data)
+        return data
 
     @swagger_auto_schema(responses={200: LotSerializer}, )
     @action(
@@ -238,7 +248,11 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
         historical_lot = Lot.objects.filter(
             Q(complete_time__isnull=False) | Q(start_time__lt=three_months_ago)
         )
-        return Response(self.get_serializer(instance=historical_lot, many=True).data, status=status.HTTP_200_OK)
+        if self.request.query_params.get('get_all', 'False').lower() == 'true':
+            return Response(self.get_serializer(instance=historical_lot, many=True).data, status=status.HTTP_200_OK)
+        historical_lot = self.paginate_queryset(historical_lot)
+        data = self.get_paginated_response(self.get_serializer(instance=historical_lot, many=True).data)
+        return data
 
     @swagger_auto_schema(responses={200: LotSerializer}, )
     @action(
@@ -258,6 +272,7 @@ class LotDataViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
 class StatusReportViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin):
     permission_classes = (permissions.IsAuthenticated, )
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -283,3 +298,74 @@ class StatusReportViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixi
             latest = StatusReport.objects.filter(chamber=chamber.get('chamber')).order_by('server_time').last()
             latest_chamber_status.append(latest)
         return Response(self.get_serializer(instance=latest_chamber_status, many=True).data, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(methods=['get'], manual_parameters=[])
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated, ])
+def statistic(request):
+    start = request.query_params.get('start')
+    end = request.query_params.get('end')
+    if not start and not end:
+        return Response(
+            {'message': 'start time and end time is required'},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    data = {
+        'total_wood_dried': [],
+        'total_chamber_quantity_dried': [],
+    }
+    lots = Lot.objects.filter(
+        company=request.user.appuser.company, start_time__range=[start, end], complete_time__isnull=False
+    )
+
+    wood_dried = lots.values('species').annotate(total_quantity=Sum('quantity'))
+    for wood in wood_dried:
+        data['total_wood_dried'].append({
+            'x': wood.get('species'),
+            'y': wood.get('total_quantity')
+        })
+
+    chambers_quantities = lots.values('chamber').annotate(total_quantity=Sum('quantity'))
+    for chamber_quantity in chambers_quantities:
+        data['total_chamber_quantity_dried'].append({
+            'x': chamber_quantity.get('chamber'),
+            'y': chamber_quantity.get('total_quantity')
+        })
+    chambers_status = StatusReport.objects.filter(server_time__range=[start, end]).order_by('chamber', 'server_time')
+    operating_time_dict = {}
+    idle_time_dict = {}
+    prev_server_time = {}
+
+    for report in chambers_status:
+        chamber_id = report.chamber
+
+        if chamber_id not in operating_time_dict:
+            operating_time_dict[chamber_id] = timedelta()
+
+        if chamber_id not in idle_time_dict:
+            idle_time_dict[chamber_id] = timedelta()
+
+        if chamber_id in prev_server_time:
+            time_diff = report.server_time - prev_server_time[chamber_id]
+        else:
+            time_diff = timedelta()
+
+        if report.status_code > 0:
+            idle_time_dict[chamber_id] += time_diff
+        else:
+            operating_time_dict[chamber_id] += time_diff
+
+        prev_server_time[chamber_id] = report.server_time
+
+    use_rate_dict = {}
+    for chamber_id in chambers_status.values_list('chamber', flat=True):
+        total_time = operating_time_dict[int(chamber_id)] + idle_time_dict[int(chamber_id)]
+        use_rate = 100.0 * ((total_time - idle_time_dict[int(chamber_id)]) / total_time) if total_time.total_seconds() != 0 else 0.0
+        use_rate_dict[chamber_id] = use_rate
+    data.update({
+        'operation_time': operating_time_dict,
+        'idle_time': idle_time_dict,
+        'total_use_rate': use_rate_dict})
+
+    return Response(data, status=status.HTTP_200_OK)
