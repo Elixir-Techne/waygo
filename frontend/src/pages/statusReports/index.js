@@ -10,13 +10,7 @@ const StatusReports = () => {
     enabled: true,
   });
   return (
-    <ArgonBox
-      mt={8}
-      display="flex"
-      flexDirection="row"
-      flexWrap="wrap"
-      gap="20px"
-    >
+    <ArgonBox display="flex" flexDirection="row" flexWrap="wrap" gap="20px">
       <Grid container spacing={3}>
         {!isLoading &&
           data?.map((item) => (

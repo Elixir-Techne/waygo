@@ -146,7 +146,7 @@ export const Lots = () => {
   };
 
   return (
-    <ArgonBox sx={{ height: "100%", width: "100%" }} mt={8}>
+    <ArgonBox sx={{ height: "100%", width: "100%" }}>
       {renderContent()}
     </ArgonBox>
   );

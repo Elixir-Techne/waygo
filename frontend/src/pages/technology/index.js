@@ -8,7 +8,7 @@ import { Grid } from "@mui/material";
 
 const Technology = () => {
   return (
-    <ArgonBox p={2} mt={8}>
+    <ArgonBox p={2}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3}>
           <DefaultProjectCard
@@ -16,7 +16,6 @@ const Technology = () => {
             label="Tech #2"
             title="modern"
             description="As Uber works through a huge amount of internal management turmoil."
-            authors={[]}
           />
         </Grid>
         <Grid item xs={12} md={6} xl={3}>

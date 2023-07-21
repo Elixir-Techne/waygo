@@ -70,6 +70,7 @@ function SignIn() {
           <ArgonBox component="form" role="form">
             <ArgonBox mb={2}>
               <ArgonInput
+                sx={{ border: "1px solid" }}
                 id="userName"
                 type="text"
                 placeholder="User Name"

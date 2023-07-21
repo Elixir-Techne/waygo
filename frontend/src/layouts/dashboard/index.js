@@ -5,10 +5,12 @@ import Sidenav from "examples/Sidenav";
 import { useArgonController, setMiniSidenav } from "context";
 import { useState } from "react";
 import waygoPng from "assets/images/waygo.png";
-import { Box } from "@mui/material";
+import ArgonBox from "components/ArgonBox";
+import { useMediaQuery } from "@mui/material";
 
 function Default() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
+  const isMobile = useMediaQuery("(max-width:475px)");
 
   const [controller, dispatch] = useArgonController();
   const { miniSidenav, sidenavColor } = controller;
@@ -38,9 +40,9 @@ function Default() {
           onMouseLeave={handleOnMouseLeave}
         />
         <DashboardNavbar />
-        <Box height="calc( 100% - 100px )" marginTop="40px">
+        <ArgonBox mt={isMobile ? 0 : 4}>
           <Outlet />
-        </Box>
+        </ArgonBox>
       </DashboardLayout>
     </>
   );

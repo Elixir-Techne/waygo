@@ -4,7 +4,7 @@ import ArgonTypography from "components/ArgonTypography";
 import React from "react";
 import { getChamberStatus } from "utils/helper";
 import dayjs from "dayjs";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 const typographyProps = {
   fontWeight: "medium",
   color: "white",
