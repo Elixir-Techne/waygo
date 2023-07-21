@@ -3,6 +3,7 @@ import ArgonBox from "components/ArgonBox";
 import StatusReportCard from "./components/StatusReportCard";
 import { Endpoints } from "utils/httpServices";
 import { useQuery } from "@tanstack/react-query";
+import { Grid } from "@mui/material";
 
 const StatusReports = () => {
   const { data, isLoading } = useQuery([Endpoints.statusReport], {
@@ -16,8 +17,14 @@ const StatusReports = () => {
       flexWrap="wrap"
       gap="20px"
     >
-      {!isLoading &&
-        data?.map((item) => <StatusReportCard data={item} key={item.id} />)}
+      <Grid container spacing={3}>
+        {!isLoading &&
+          data?.map((item) => (
+            <Grid item xs={12} sm={6} md={6} lg={6} xl={4}>
+              <StatusReportCard data={item} key={item.id} />
+            </Grid>
+          ))}
+      </Grid>
     </ArgonBox>
   );
 };

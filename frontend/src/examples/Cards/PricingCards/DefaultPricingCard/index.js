@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// react-router-dom components
 import { Link } from "react-router-dom";
 
 // prop-types is a library for typechecking of props
@@ -44,7 +28,9 @@ function DefaultPricingCard({ title, price, specifications, action }) {
         mr={2}
       >
         <ArgonTypography variant="button" color="white" sx={{ lineHeight: 0 }}>
-          <Icon sx={{ fontWeight: "bold" }}>{includes ? "done" : "remove"}</Icon>
+          <Icon sx={{ fontWeight: "bold" }}>
+            {includes ? "done" : "remove"}
+          </Icon>
         </ArgonTypography>
       </ArgonBox>
       <ArgonTypography variant="body2" color="text">
@@ -56,7 +42,12 @@ function DefaultPricingCard({ title, price, specifications, action }) {
   return (
     <Card>
       <ArgonBox pt={3} pb={2} px={2} textAlign="center">
-        <ArgonTypography variant="body2" color="dark" textTransform="uppercase" fontWeight="medium">
+        <ArgonTypography
+          variant="body2"
+          color="dark"
+          textTransform="uppercase"
+          fontWeight="medium"
+        >
           {title}
         </ArgonTypography>
         <ArgonBox my={1}>
@@ -72,7 +63,12 @@ function DefaultPricingCard({ title, price, specifications, action }) {
         {renderSpecifications}
         {action.type === "internal" ? (
           <ArgonBox mt={3}>
-            <ArgonButton component={Link} to={action.route} color={action.color} fullWidth>
+            <ArgonButton
+              component={Link}
+              to={action.route}
+              color={action.color}
+              fullWidth
+            >
               {action.label}&nbsp;
               <Icon sx={{ fontWeight: "bold" }}>arrow_forward</Icon>
             </ArgonButton>

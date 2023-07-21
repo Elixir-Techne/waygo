@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// react-routers components
 import { Link } from "react-router-dom";
 
 // prop-types is library for typechecking of props
@@ -43,7 +27,10 @@ function ProfileInfoCard({ title, description, info, social, action }) {
   Object.keys(info).forEach((el) => {
     if (el.match(/[A-Z\s]+/)) {
       const uppercaseLetter = Array.from(el).find((i) => i.match(/[A-Z]+/));
-      const newElement = el.replace(uppercaseLetter, ` ${uppercaseLetter.toLowerCase()}`);
+      const newElement = el.replace(
+        uppercaseLetter,
+        ` ${uppercaseLetter.toLowerCase()}`
+      );
 
       labels.push(newElement);
     } else {
@@ -57,7 +44,11 @@ function ProfileInfoCard({ title, description, info, social, action }) {
   // Render the card info items
   const renderItems = labels.map((label, key) => (
     <ArgonBox key={label} display="flex" py={1} pr={2}>
-      <ArgonTypography variant="button" fontWeight="bold" textTransform="capitalize">
+      <ArgonTypography
+        variant="button"
+        fontWeight="bold"
+        textTransform="capitalize"
+      >
         {label}: &nbsp;
       </ArgonTypography>
       <ArgonTypography variant="button" fontWeight="regular" color="text">
@@ -86,11 +77,26 @@ function ProfileInfoCard({ title, description, info, social, action }) {
 
   return (
     <Card sx={{ height: "100%" }}>
-      <ArgonBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
-        <ArgonTypography variant="h6" fontWeight="medium" textTransform="capitalize">
+      <ArgonBox
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        pt={2}
+        px={2}
+      >
+        <ArgonTypography
+          variant="h6"
+          fontWeight="medium"
+          textTransform="capitalize"
+        >
           {title}
         </ArgonTypography>
-        <ArgonTypography component={Link} to={action.route} variant="body2" color="secondary">
+        <ArgonTypography
+          component={Link}
+          to={action.route}
+          variant="body2"
+          color="secondary"
+        >
           <Tooltip title={action.tooltip} placement="top">
             <Icon>edit</Icon>
           </Tooltip>
@@ -108,7 +114,11 @@ function ProfileInfoCard({ title, description, info, social, action }) {
         <ArgonBox>
           {renderItems}
           <ArgonBox display="flex" py={1} pr={2}>
-            <ArgonTypography variant="button" fontWeight="bold" textTransform="capitalize">
+            <ArgonTypography
+              variant="button"
+              fontWeight="bold"
+              textTransform="capitalize"
+            >
               social: &nbsp;
             </ArgonTypography>
             {renderSocial}

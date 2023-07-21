@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 
 // react-router-dom components
@@ -12,7 +11,6 @@ import ArgonBox from "components/ArgonBox";
 
 // Argon Dashboard 2 MUI context
 import { useArgonController, setLayout } from "context";
-import Sidenav from "examples/Sidenav";
 
 function DashboardLayout({ bgColor, children, ...rest }) {
   const [controller, dispatch] = useArgonController();
@@ -21,7 +19,7 @@ function DashboardLayout({ bgColor, children, ...rest }) {
 
   useEffect(() => {
     setLayout(dispatch, "dashboard");
-  }, [pathname]);
+  }, [pathname, dispatch]);
 
   const background = darkMode && !bgColor ? "transparent" : bgColor;
 

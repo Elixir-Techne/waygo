@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// react-router components
 import { Link } from "react-router-dom";
 
 // prop-types is a library for typechecking of props
@@ -28,17 +12,36 @@ import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonAvatar from "components/ArgonAvatar";
 
-function DefaultBlogCard({ image, category, title, description, author, action }) {
+function DefaultBlogCard({
+  image,
+  category,
+  title,
+  description,
+  author,
+  action,
+}) {
   return (
     <Card>
       <ArgonBox mt={2} mx={2}>
         {action.type === "internal" ? (
           <Link to={action.route}>
-            <ArgonBox component="img" src={image} alt={title} width="100%" borderRadius="lg" />
+            <ArgonBox
+              component="img"
+              src={image}
+              alt={title}
+              width="100%"
+              borderRadius="lg"
+            />
           </Link>
         ) : (
           <MuiLink href={action.route} target="_blank" rel="noreferrer">
-            <ArgonBox component="img" src={image} alt={title} width="100%" borderRadius="lg" />
+            <ArgonBox
+              component="img"
+              src={image}
+              alt={title}
+              width="100%"
+              borderRadius="lg"
+            />
           </MuiLink>
         )}
       </ArgonBox>
@@ -84,9 +87,19 @@ function DefaultBlogCard({ image, category, title, description, author, action }
         </ArgonTypography>
         {author && (
           <ArgonBox display="flex" alignItems="center" mt={3}>
-            <ArgonAvatar variant="rounded" src={author.image} alt={author.name} shadow="md" />
+            <ArgonAvatar
+              variant="rounded"
+              src={author.image}
+              alt={author.name}
+              shadow="md"
+            />
             <ArgonBox pl={2} lineHeight={0}>
-              <ArgonTypography component="h6" variant="button" fontWeight="medium" gutterBottom>
+              <ArgonTypography
+                component="h6"
+                variant="button"
+                fontWeight="medium"
+                gutterBottom
+              >
                 {author.name}
               </ArgonTypography>
               <ArgonTypography variant="caption" color="text">

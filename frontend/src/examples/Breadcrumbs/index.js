@@ -28,7 +28,7 @@ function Breadcrumbs({ icon, title, route, light }) {
           <ArgonTypography
             component="span"
             variant="body2"
-            color={light ? "white" : "dark"}
+            color={light ? "white" : "black"}
             opacity={light ? 0.8 : 0.5}
             sx={{ lineHeight: 0 }}
           >
@@ -42,7 +42,7 @@ function Breadcrumbs({ icon, title, route, light }) {
               variant="button"
               fontWeight="regular"
               textTransform="capitalize"
-              color={light ? "white" : "dark"}
+              color={light ? "white" : "black"}
               opacity={light ? 0.8 : 0.5}
               sx={{ lineHeight: 0 }}
             >
@@ -53,7 +53,7 @@ function Breadcrumbs({ icon, title, route, light }) {
         <ArgonTypography
           variant="button"
           textTransform="capitalize"
-          color={light ? "white" : "dark"}
+          color={light ? "white" : "black"}
           sx={{ lineHeight: 0 }}
         >
           {title ? title.replace("-", " ") : "Status Reports"}

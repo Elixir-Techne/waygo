@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // react-router components
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -16,11 +16,9 @@ import Icon from "@mui/material/Icon";
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
-import ArgonInput from "components/ArgonInput";
 
 // Argon Dashboard 2 MUI example components
 import Breadcrumbs from "examples/Breadcrumbs";
-import NotificationItem from "examples/Items/NotificationItem";
 
 import PublicIcon from "@mui/icons-material/Public";
 
@@ -29,9 +27,7 @@ import {
   navbar,
   navbarContainer,
   navbarRow,
-  navbarIconButton,
   navbarDesktopMenu,
-  navbarMobileMenu,
 } from "examples/Navbars/DashboardNavbar/styles";
 
 // Argon Dashboard 2 MUI context
@@ -39,20 +35,11 @@ import {
   useArgonController,
   setTransparentNavbar,
   setMiniSidenav,
-  setOpenConfigurator,
 } from "context";
 
 // Images
-import team2 from "assets/images/team-2.jpg";
-import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import DarkModeSwitcher from "components/DarkModeSwitcher";
-import {
-  Button,
-  FormControlLabel,
-  MenuItem,
-  Select,
-  Stack,
-} from "@mui/material";
+import { MenuItem, Stack, useMediaQuery } from "@mui/material";
 import { setDarkSidenav } from "context";
 import { setDarkMode } from "context";
 import { getUser } from "utils/helper";
@@ -63,16 +50,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const open = Boolean(anchorEl);
   const [controller, dispatch] = useArgonController();
   const { user, company } = getUser();
+  const isMobile = useMediaQuery("(max-width:475px)");
 
-  const {
-    miniSidenav,
-    transparentNavbar,
-    fixedNavbar,
-    openConfigurator,
-    darkMode,
-    sidenavColor,
-  } = controller;
-  const [openMenu, setOpenMenu] = useState(false);
+  const { miniSidenav, transparentNavbar, fixedNavbar, darkMode } = controller;
   const route = useLocation().pathname.split("/").slice(1);
 
   useEffect(() => {
@@ -105,10 +85,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
   }, [dispatch, fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
-  const handleConfiguratorOpen = () =>
-    setOpenConfigurator(dispatch, !openConfigurator);
-  const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
-  const handleCloseMenu = () => setOpenMenu(false);
 
   const handleDarkMode = () => {
     setDarkSidenav(dispatch, !darkMode);
@@ -128,6 +104,14 @@ function DashboardNavbar({ absolute, light, isMini }) {
       color="inherit"
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
     >
+      {isMobile ? (
+        <Breadcrumbs
+          icon="home"
+          title={route[route.length - 1]}
+          route={route}
+          light={transparentNavbar}
+        />
+      ) : null}
       <ArgonBox
         sx={{
           display: "flex",
@@ -137,12 +121,14 @@ function DashboardNavbar({ absolute, light, isMini }) {
         }}
       >
         <ArgonBox display="flex" flexDirection="row-reverse">
-          <Breadcrumbs
-            icon="home"
-            title={route[route.length - 1]}
-            route={route}
-            light={transparentNavbar ? light : false}
-          />
+          {!isMobile ? (
+            <Breadcrumbs
+              icon="home"
+              title={route[route.length - 1]}
+              route={route}
+              light={transparentNavbar ? light : false}
+            />
+          ) : null}
           <Icon
             fontSize="medium"
             sx={
@@ -155,34 +141,29 @@ function DashboardNavbar({ absolute, light, isMini }) {
           </Icon>
         </ArgonBox>
         <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
-          {/* <ArgonBox
-            color={light && transparentNavbar ? "white" : "dark"}
-            mb={{ xs: 1, md: 0 }}
-            sx={(theme) => navbarRow(theme, { isMini })}
-          ></ArgonBox> */}
-
           {isMini ? null : (
             <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
               <ArgonTypography
                 variant="button"
                 fontWeight="medium"
-                color={light && transparentNavbar ? "white" : "dark"}
-                fontSize="1.3rem"
+                // color={darkMode && transparentNavbar ? "dark" : "white"}
+                color={transparentNavbar ? "white" : "black"}
+                fontSize={isMobile ? "1rem" : "1.3rem"}
               >
                 {user.username}
               </ArgonTypography>
               <ArgonTypography
                 variant="button"
                 fontWeight="medium"
-                color={light && transparentNavbar ? "white" : "dark"}
-                fontSize="1.3rem"
+                color={transparentNavbar ? "white" : "black"}
+                fontSize={isMobile ? "1rem" : "1.3rem"}
               >
                 {company.name}
               </ArgonTypography>
               <ArgonTypography
                 variant="button"
                 fontWeight="medium"
-                color={light && transparentNavbar ? "white" : "dark"}
+                color={transparentNavbar ? "white" : "black"}
               >
                 <IconButton
                   id="basic-button"
@@ -193,9 +174,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 >
                   <PublicIcon
                     fontSize="medium"
+                    color={transparentNavbar ? "white" : "black"}
                     sx={{
+                      fill: transparentNavbar ? "white" : "black",
                       cursor: "pointer",
-                      color: "lightgray",
                       fontWeight: "bold",
                     }}
                   />
@@ -229,8 +211,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 <ArgonTypography
                   variant="button"
                   fontWeight="medium"
-                  color={light && transparentNavbar ? "white" : "dark"}
-                  fontSize="1rem"
+                  color={transparentNavbar ? "white" : "black"}
+                  fontSize={isMobile ? "0.8rem" : "1rem"}
                 >
                   Dark Mode
                 </ArgonTypography>

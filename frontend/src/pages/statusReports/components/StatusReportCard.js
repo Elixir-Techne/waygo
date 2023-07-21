@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@mui/material";
+import { Card, CardContent, CardHeader, useMediaQuery } from "@mui/material";
 import { typography } from "@mui/system";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
@@ -11,6 +11,8 @@ const typographyProps = {
   color: "white",
 };
 const StatusReportCard = ({ data }) => {
+  const status = getChamberStatus(data?.lot?.status_code);
+  const isMobile = useMediaQuery("(max-width:475px)");
   const { darkMode } = Controller;
   return (
     <Card
@@ -18,8 +20,8 @@ const StatusReportCard = ({ data }) => {
         flex: 1,
         background: "transparent",
         boxShadow: "none",
-        minWidth: "350px",
-        backgroundColor: "transparent",
+        minWidth: isMobile ? "260px" : "350px",
+        backgroundColor: status === "idel" ? "blue" : "green",
         boxShadow: "0px 0px 5px 2px lightgray",
         borderRadius: "5px",
         maxHeight: "421px",
@@ -28,47 +30,48 @@ const StatusReportCard = ({ data }) => {
       <CardHeader
         sx={{ textAlign: "center" }}
         title={
-          <ArgonTypography {...typographyProps} color="black">
+          <ArgonTypography {...typographyProps}>
             Chamber {data.chamber}
           </ArgonTypography>
         }
       />
       <CardContent>
-        <ArgonTypography {...typographyProps} color="black">
-          Last Report:
-        </ArgonTypography>
-        <ArgonTypography {...typographyProps} color="black">
+        <ArgonTypography {...typographyProps}>Last Report:</ArgonTypography>
+        <ArgonTypography {...typographyProps}>
           Status: {getChamberStatus(data?.lot?.status_code)}
         </ArgonTypography>
-        <ArgonTypography {...typographyProps} color="black">
-          Species: {data?.lot?.species}
-        </ArgonTypography>
-        <ArgonTypography {...typographyProps} color="black">
-          Quantity: {data?.lot?.quantity}
-        </ArgonTypography>
-        <ArgonTypography {...typographyProps} color="black">
-          RH:
-        </ArgonTypography>
-        <ArgonBox display="flex" justifyContent="space-between">
-          <ArgonTypography {...typographyProps} color="black">
-            DBTI:
-          </ArgonTypography>
-          <ArgonTypography {...typographyProps} color="black">
-            WBTI:
-          </ArgonTypography>
-        </ArgonBox>
-        <ArgonTypography {...typographyProps} color="black">
-          AMC:
-        </ArgonTypography>
-        <ArgonTypography {...typographyProps} color="black">
-          Current Command:
-        </ArgonTypography>
-        <ArgonTypography {...typographyProps} color="black">
-          Start time:
-        </ArgonTypography>
-        <ArgonTypography {...typographyProps} color="black">
-          Time ellapsed:
-        </ArgonTypography>
+        {!status === "idel" ? (
+          <>
+            <ArgonTypography {...typographyProps}>
+              Species: {data?.lot?.species}
+            </ArgonTypography>
+            <ArgonTypography {...typographyProps}>
+              Quantity: {data?.lot?.quantity}
+            </ArgonTypography>
+            <ArgonTypography {...typographyProps}>RH:</ArgonTypography>
+            <ArgonBox display="flex" justifyContent="space-between">
+              <ArgonTypography {...typographyProps}>DBTI:</ArgonTypography>
+              <ArgonTypography {...typographyProps}>WBTI:</ArgonTypography>
+            </ArgonBox>
+            <ArgonTypography {...typographyProps}>AMC:</ArgonTypography>
+            <ArgonTypography {...typographyProps}>
+              Current Command:
+            </ArgonTypography>
+            <ArgonTypography {...typographyProps}>Start time:</ArgonTypography>
+            <ArgonTypography {...typographyProps}>
+              Time ellapsed:
+            </ArgonTypography>
+          </>
+        ) : (
+          <>
+            <ArgonTypography {...typographyProps}>
+              Last completed lot:
+            </ArgonTypography>
+            <ArgonTypography {...typographyProps}>
+              Idel for:{data?.time}
+            </ArgonTypography>
+          </>
+        )}
       </CardContent>
     </Card>
   );

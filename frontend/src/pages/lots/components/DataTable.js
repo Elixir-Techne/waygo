@@ -223,7 +223,7 @@ export const LotsDataTable = ({ lotID }) => {
       </ArgonBox>
       <DataGrid
         ref={ref}
-        rows={data || []}
+        rows={data?.results || []}
         columns={columns}
         loading={isLoading}
         disableRowSelectionOnClick

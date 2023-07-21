@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // react-github-btn
 import GitHubButton from "react-github-btn";
 
@@ -48,9 +33,22 @@ import {
 
 function Configurator() {
   const [controller, dispatch] = useArgonController();
-  const { openConfigurator, darkSidenav, miniSidenav, fixedNavbar, sidenavColor, darkMode } =
-    controller;
-  const sidenavColors = ["primary", "dark", "info", "success", "warning", "error"];
+  const {
+    openConfigurator,
+    darkSidenav,
+    miniSidenav,
+    fixedNavbar,
+    sidenavColor,
+    darkMode,
+  } = controller;
+  const sidenavColors = [
+    "primary",
+    "dark",
+    "info",
+    "success",
+    "warning",
+    "error",
+  ];
 
   const handleCloseConfigurator = () => setOpenConfigurator(dispatch, false);
   const handledarkSidenav = () => setDarkSidenav(dispatch, true);
@@ -80,7 +78,10 @@ function Configurator() {
         </ArgonBox>
 
         <Icon
-          sx={({ typography: { size, fontWeightBold }, palette: { dark, white } }) => ({
+          sx={({
+            typography: { size, fontWeightBold },
+            palette: { dark, white },
+          }) => ({
             fontSize: `${size.md} !important`,
             fontWeight: `${fontWeightBold} !important`,
             color: darkMode ? white.main : dark.main,
@@ -105,7 +106,11 @@ function Configurator() {
             {sidenavColors.map((color) => (
               <IconButton
                 key={color}
-                sx={({ borders: { borderWidth }, palette: { white, dark }, transitions }) => ({
+                sx={({
+                  borders: { borderWidth },
+                  palette: { white, dark },
+                  transitions,
+                }) => ({
                   width: "24px",
                   height: "24px",
                   padding: 0,
@@ -115,8 +120,14 @@ function Configurator() {
                     easing: transitions.easing.sharp,
                     duration: transitions.duration.shorter,
                   }),
-                  backgroundImage: ({ functions: { linearGradient }, palette: { gradients } }) =>
-                    linearGradient(gradients[color].main, gradients[color].state),
+                  backgroundImage: ({
+                    functions: { linearGradient },
+                    palette: { gradients },
+                  }) =>
+                    linearGradient(
+                      gradients[color].main,
+                      gradients[color].state
+                    ),
 
                   "&:not(:last-child)": {
                     mr: 1,
@@ -165,7 +176,12 @@ function Configurator() {
             </ArgonButton>
           </ArgonBox>
         </ArgonBox>
-        <ArgonBox display="flex" justifyContent="space-between" mt={3} lineHeight={1}>
+        <ArgonBox
+          display="flex"
+          justifyContent="space-between"
+          mt={3}
+          lineHeight={1}
+        >
           <ArgonTypography variant="h6">Navbar Fixed</ArgonTypography>
 
           <Switch checked={fixedNavbar} onChange={handleFixedNavbar} />
@@ -237,7 +253,9 @@ function Configurator() {
         </ArgonBox>
         <ArgonBox mt={3} textAlign="center">
           <ArgonBox mb={0.5}>
-            <ArgonTypography variant="h6">Thank you for sharing!</ArgonTypography>
+            <ArgonTypography variant="h6">
+              Thank you for sharing!
+            </ArgonTypography>
           </ArgonBox>
 
           <ArgonBox display="flex" justifyContent="center">

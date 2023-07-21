@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
 // @mui material components
@@ -28,13 +12,22 @@ import ArgonTypography from "components/ArgonTypography";
 // Argon Dashboard 2 MUI contexts
 import { useArgonController } from "context";
 
-function MiniStatisticsCard({ bgColor, title, count, percentage, icon, direction }) {
+function MiniStatisticsCard({
+  bgColor,
+  title,
+  count,
+  percentage,
+  icon,
+  direction,
+}) {
   const [controller] = useArgonController();
   const { darkMode } = controller;
 
   return (
     <Card>
-      <ArgonBox bgColor={bgColor === "white" && darkMode ? "transparent" : bgColor}>
+      <ArgonBox
+        bgColor={bgColor === "white" && darkMode ? "transparent" : bgColor}
+      >
         <ArgonBox p={2}>
           <Grid container alignItems="center">
             {direction === "left" ? (
@@ -73,7 +66,11 @@ function MiniStatisticsCard({ bgColor, title, count, percentage, icon, direction
                   color={bgColor === "white" ? "dark" : "white"}
                 >
                   {count}{" "}
-                  <ArgonTypography variant="button" color={percentage.color} fontWeight="bold">
+                  <ArgonTypography
+                    variant="button"
+                    color={percentage.color}
+                    fontWeight="bold"
+                  >
                     {percentage.text}
                   </ArgonTypography>
                 </ArgonTypography>
@@ -151,7 +148,15 @@ MiniStatisticsCard.propTypes = {
     text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   icon: PropTypes.shape({
-    color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
+    color: PropTypes.oneOf([
+      "primary",
+      "secondary",
+      "info",
+      "success",
+      "warning",
+      "error",
+      "dark",
+    ]),
     component: PropTypes.node.isRequired,
   }).isRequired,
   direction: PropTypes.oneOf(["right", "left"]),

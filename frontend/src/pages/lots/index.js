@@ -136,7 +136,7 @@ export const Lots = () => {
               <ArgonButton onClick={handlePrint}>Print</ArgonButton>
             </ArgonBox> */}
             <DataGrid
-              rows={data || []}
+              rows={data?.results || []}
               columns={columns}
               loading={isLoading}
               disableRowSelectionOnClick
