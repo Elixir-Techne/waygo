@@ -1,16 +1,8 @@
 {
-  "name": "argon-dashboard-mui",
-  "version": "3.0.1",
-  "author": "Creative Tim",
+  "name": "waygo",
+  "private": true,
+  "version": "0.0.0",
   "license": "SEE LICENSE IN <https://www.creative-tim.com/license>",
-  "description": "React version of Argon Dashboard 2 by Creative Tim",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/argon-dashboard-material-ui/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/creativetimofficial/argon-dashboard-material-ui.git"
-  },
   "dependencies": {
     "@emotion/cache": "11.11.0",
     "@emotion/react": "11.11.0",
