@@ -29,3 +29,35 @@ Start the server
 ```bash
   npm run start
 ```
+
+## Run Backend Locally
+
+Go to the backend directory
+
+```bash
+  cd backend
+```
+
+Copy .env.template to .env and fill appropriate data
+
+```bash
+  cp .env.template .env
+```
+
+Build Docker Image
+
+```bash
+  docker-compose build
+```
+
+Start Backend using Docker
+
+```bash
+  docker-compose up -d
+```
+
+Stop Backend using Docker
+
+```bash
+  docker-compose down
+```
