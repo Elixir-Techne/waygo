@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Endpoints } from "utils/httpServices";
 
-import moment from "moment";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import { useEffect, useState } from "react";
@@ -11,6 +10,7 @@ import ArgonButton from "components/ArgonButton";
 import { useNavigate } from "react-router-dom";
 import { useArgonController } from "context";
 import print from "assets/images/print.svg";
+import dayjs from "dayjs";
 
 const keys = ["rh", "amc", "wbt1", "dbt1", "wood_temp1"];
 
@@ -65,7 +65,7 @@ export const LotsDataPlot = ({ lotID }) => {
       const temp = data?.reduce((acc, curr) => {
         keys.forEach((key) => {
           const obj = {
-            x: moment(curr.time).format("YYYY-MM-DD"),
+            x: dayjs(curr.time).format("YYYY-MM-DD"),
             y: curr[key],
           };
           if (acc?.[key]) {

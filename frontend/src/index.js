@@ -22,7 +22,6 @@ import App from "App";
 import { ArgonControllerProvider } from "context";
 
 // react-perfect-scrollbar styles
-import "react-perfect-scrollbar/dist/css/styles.css";
 import "./global.css";
 const container = document.getElementById("root");
 const root = createRoot(container);

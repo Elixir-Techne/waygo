@@ -2,13 +2,13 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
 import ArgonBox from "components/ArgonBox";
 import ArgonButton from "components/ArgonButton";
-import moment from "moment";
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Endpoints } from "utils/httpServices";
 import { LotsDataTable } from "./components/DataTable";
 import { LotsDataPlot } from "./components/DataPlot";
 import ExportToolBar from "examples/ExportToolBar";
+import dayjs from "dayjs";
 
 export const Lots = () => {
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ export const Lots = () => {
       // flex: 1,
       width: 130,
       sortable: false,
-      renderCell: ({ row }) => moment(row.start_time).format("YYYY-MM-DD"),
+      renderCell: ({ row }) => dayjs(row.start_time).format("YYYY-MM-DD"),
     },
     {
       field: "program_name",
