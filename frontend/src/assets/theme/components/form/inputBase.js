@@ -28,17 +28,17 @@ const { borderWidth, borderRadius } = borders;
 const inputBase = {
   styleOverrides: {
     root: {
-      display: "flex !important",
-      alignItems: "center !important",
-      height: "auto !important",
-      padding: `${pxToRem(8)} ${pxToRem(12)}`,
-      fontSize: `${size.sm} !important`,
-      fontWeight: `${fontWeightRegular} !important`,
-      lineHeight: "1.4 !important",
-      color: "`${grey[700]} !important`",
-      backgroundColor: `${white.main} !important`,
-      backgroundClip: "padding-box !important",
-      border: `${borderWidth[1]} solid ${inputColors.borderColor.main}`,
+      //   display: "flex !important",
+      //   alignItems: "center !important",
+      //   height: "auto !important",
+      // padding: `${pxToRem(8)} ${pxToRem(12)}`,
+      // fontSize: `${size.sm} !important`,
+      //   fontWeight: `${fontWeightRegular} !important`,
+      //   lineHeight: "1.4 !important",
+      //   color: "`${grey[700]} !important`",
+      //   backgroundColor: `${white.main} !important`,
+      //   backgroundClip: "padding-box !important",
+      //   border: `${borderWidth[1]} solid ${inputColors.borderColor.main}`,
       appearance: "none !important",
       borderRadius: borderRadius.md,
       transition:
@@ -47,11 +47,11 @@ const inputBase = {
 
     input: {
       width: "100% !important",
-      height: pxToRem(22),
-      paddingTop: "0 !important",
-      paddingRight: "0 !important",
-      paddingBottom: "0 !important",
-      paddingLeft: pxToRem(6),
+      // height: pxToRem(25),
+      // paddingTop: "0 !important",
+      // paddingRight: "0 !important",
+      // paddingBottom: "0 !important",
+      // paddingLeft: pxToRem(6),
 
       "&::-webkit-input-placeholder": {
         color: `${dark.main} !important`,

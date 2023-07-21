@@ -176,9 +176,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
                     fontSize="medium"
                     color={transparentNavbar ? "white" : "black"}
                     sx={{
-                      fill: transparentNavbar ? "white" : "black",
+                      fill: transparentNavbar ? "#fff" : "#344767",
                       cursor: "pointer",
-                      fontWeight: "bold",
                     }}
                   />
                 </IconButton>

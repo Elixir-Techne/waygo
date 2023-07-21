@@ -217,13 +217,14 @@ export const LotsDataTable = ({ lotID }) => {
             navigate(-1);
           }}
         >
-          <ArrowBackIosIcon />
+          <ArrowBackIosIcon sx={{ fill: "#000" }} />
           Back
         </ArgonButton>
       </ArgonBox>
       <DataGrid
         ref={ref}
         rows={data?.results || []}
+        autoHeight
         columns={columns}
         loading={isLoading}
         disableRowSelectionOnClick

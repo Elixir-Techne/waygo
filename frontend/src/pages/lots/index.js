@@ -1,19 +1,13 @@
-import {
-  DataGrid,
-  GridToolbar,
-  GridToolbarContainer,
-  GridToolbarExport,
-} from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
 import ArgonBox from "components/ArgonBox";
 import ArgonButton from "components/ArgonButton";
 import moment from "moment";
-import React, { useState } from "react";
+import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Endpoints } from "utils/httpServices";
 import { LotsDataTable } from "./components/DataTable";
 import { LotsDataPlot } from "./components/DataPlot";
-import Loader from "examples/Loader";
 import ExportToolBar from "examples/ExportToolBar";
 
 export const Lots = () => {
@@ -132,10 +126,8 @@ export const Lots = () => {
       default:
         return (
           <>
-            {/* <ArgonBox mb={2} display="flex" justifyContent="end">
-              <ArgonButton onClick={handlePrint}>Print</ArgonButton>
-            </ArgonBox> */}
             <DataGrid
+              autoHeight
               rows={data?.results || []}
               columns={columns}
               loading={isLoading}

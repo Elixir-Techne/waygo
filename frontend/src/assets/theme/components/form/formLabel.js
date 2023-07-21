@@ -22,6 +22,7 @@ const formLabel = {
   styleOverrides: {
     root: {
       color: dark.main,
+      fontSize: "1rem",
     },
   },
 };
