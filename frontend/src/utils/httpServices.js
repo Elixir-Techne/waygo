@@ -41,4 +41,5 @@ export const Endpoints = {
   ongoingLots: "/lots/ongoing-lot/",
   historicalLots: "/lots/historical-lot/",
   lots: "lots/",
+  statistics: "/statistic",
 };

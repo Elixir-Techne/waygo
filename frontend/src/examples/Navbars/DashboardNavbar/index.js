@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // react-router components
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -16,11 +16,9 @@ import Icon from "@mui/material/Icon";
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
-import ArgonInput from "components/ArgonInput";
 
 // Argon Dashboard 2 MUI example components
 import Breadcrumbs from "examples/Breadcrumbs";
-import NotificationItem from "examples/Items/NotificationItem";
 
 import PublicIcon from "@mui/icons-material/Public";
 
@@ -29,9 +27,7 @@ import {
   navbar,
   navbarContainer,
   navbarRow,
-  navbarIconButton,
   navbarDesktopMenu,
-  navbarMobileMenu,
 } from "examples/Navbars/DashboardNavbar/styles";
 
 // Argon Dashboard 2 MUI context
@@ -39,20 +35,11 @@ import {
   useArgonController,
   setTransparentNavbar,
   setMiniSidenav,
-  setOpenConfigurator,
 } from "context";
 
 // Images
-import team2 from "assets/images/team-2.jpg";
-import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import DarkModeSwitcher from "components/DarkModeSwitcher";
-import {
-  Button,
-  FormControlLabel,
-  MenuItem,
-  Select,
-  Stack,
-} from "@mui/material";
+import { MenuItem, Stack } from "@mui/material";
 import { setDarkSidenav } from "context";
 import { setDarkMode } from "context";
 import { getUser } from "utils/helper";
@@ -64,15 +51,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [controller, dispatch] = useArgonController();
   const { user, company } = getUser();
 
-  const {
-    miniSidenav,
-    transparentNavbar,
-    fixedNavbar,
-    openConfigurator,
-    darkMode,
-    sidenavColor,
-  } = controller;
-  const [openMenu, setOpenMenu] = useState(false);
+  const { miniSidenav, transparentNavbar, fixedNavbar, darkMode } = controller;
   const route = useLocation().pathname.split("/").slice(1);
 
   useEffect(() => {
@@ -105,10 +84,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
   }, [dispatch, fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
-  const handleConfiguratorOpen = () =>
-    setOpenConfigurator(dispatch, !openConfigurator);
-  const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
-  const handleCloseMenu = () => setOpenMenu(false);
 
   const handleDarkMode = () => {
     setDarkSidenav(dispatch, !darkMode);
@@ -155,12 +130,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
           </Icon>
         </ArgonBox>
         <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
-          {/* <ArgonBox
-            color={light && transparentNavbar ? "white" : "dark"}
-            mb={{ xs: 1, md: 0 }}
-            sx={(theme) => navbarRow(theme, { isMini })}
-          ></ArgonBox> */}
-
           {isMini ? null : (
             <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
               <ArgonTypography
@@ -194,9 +163,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   <PublicIcon
                     fontSize="medium"
                     sx={{
+                      fill: transparentNavbar ? "#fff" : "#344767",
                       cursor: "pointer",
-                      color: "lightgray",
-                      fontWeight: "bold",
                     }}
                   />
                 </IconButton>

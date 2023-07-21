@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 // react-router-dom components
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, Link } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -9,7 +9,6 @@ import PropTypes from "prop-types";
 // @mui material components
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
 
 // Argon Dashboard 2 MUI components
@@ -95,7 +94,7 @@ function Sidenav({ color, brand, brandName, ...rest }) {
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
   const renderRoutes = routes.map((item) => {
     return (
-      <Link href={item.path} key={item.path} rel="noreferrer">
+      <Link to={item.path} key={item.path} rel="noreferrer">
         <SidenavItem
           name={item.title}
           active={
