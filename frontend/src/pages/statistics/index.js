@@ -70,19 +70,20 @@ const Statistics = () => {
   );
 
   return (
-    <ArgonBox>
-      <ArgonBox sx={{ gap: "10px", display: "flex" }}>
+    <ArgonBox sx={{ height: "100%", width: "100%" }}>
+      <ArgonBox sx={{ gap: "10px", display: "flex", flexWrap: "wrap" }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Start Date"
-            value={start}
-            onChange={(newValue) => setStart(newValue)}
-          />
-          <DatePicker
-            label="End Date"
-            value={end}
-            onChange={(newValue) => setEnd(newValue)}
-          />
+          <ArgonBox display="flex" flexDirection="column">
+            <ArgonTypography>Start Date</ArgonTypography>
+            <DatePicker
+              value={start}
+              onChange={(newValue) => setStart(newValue)}
+            />
+          </ArgonBox>
+          <ArgonBox display="flex" flexDirection="column">
+            <ArgonTypography>End Date</ArgonTypography>
+            <DatePicker value={end} onChange={(newValue) => setEnd(newValue)} />
+          </ArgonBox>
         </LocalizationProvider>
       </ArgonBox>
       {data ? (
