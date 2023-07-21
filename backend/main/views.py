@@ -220,8 +220,11 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
     )
     def lot_lotdata(self, request, pk=None):
         lot_data = LotData.objects.filter(lot_id=pk)
+        if self.request.query_params.get('get_all', 'False').lower() == 'true':
+            return Response(LotDataSerializer(instance=lot_data, many=True).data, status=status.HTTP_200_OK)
         lot_data = self.paginate_queryset(lot_data)
-        return self.get_paginated_response(LotDataSerializer(instance=lot_data, many=True).data)
+        data = self.get_paginated_response(LotDataSerializer(instance=lot_data, many=True).data)
+        return data
 
     @swagger_auto_schema(responses={200: LotSerializer}, )
     @action(
@@ -230,8 +233,11 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
     def ongoing_lot(self, request):
         three_months_ago = timezone.now() - timedelta(days=settings.DEFAULT_DAYS)
         ongoing_lot = Lot.objects.filter(complete_time__isnull=True, start_time__gte=three_months_ago)
+        if self.request.query_params.get('get_all', 'False').lower() == 'true':
+            return Response(self.get_serializer(instance=ongoing_lot, many=True).data, status=status.HTTP_200_OK)
         ongoing_lot = self.paginate_queryset(ongoing_lot)
-        return self.get_paginated_response(self.get_serializer(instance=ongoing_lot, many=True).data)
+        data = self.get_paginated_response(self.get_serializer(instance=ongoing_lot, many=True).data)
+        return data
 
     @swagger_auto_schema(responses={200: LotSerializer}, )
     @action(
@@ -242,8 +248,11 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
         historical_lot = Lot.objects.filter(
             Q(complete_time__isnull=False) | Q(start_time__lt=three_months_ago)
         )
+        if self.request.query_params.get('get_all', 'False').lower() == 'true':
+            return Response(self.get_serializer(instance=historical_lot, many=True).data, status=status.HTTP_200_OK)
         historical_lot = self.paginate_queryset(historical_lot)
-        return self.get_paginated_response(self.get_serializer(instance=historical_lot, many=True).data)
+        data = self.get_paginated_response(self.get_serializer(instance=historical_lot, many=True).data)
+        return data
 
     @swagger_auto_schema(responses={200: LotSerializer}, )
     @action(
@@ -302,8 +311,6 @@ def statistic(request):
             {'message': 'start time and end time is required'},
             status=status.HTTP_400_BAD_REQUEST,
         )
-    species = request.query_params.get('species')
-    chambers = request.query_params.get('chambers')
     data = {
         'total_wood_dried': [],
         'total_chamber_quantity_dried': [],
@@ -311,61 +318,54 @@ def statistic(request):
     lots = Lot.objects.filter(
         company=request.user.appuser.company, start_time__range=[start, end], complete_time__isnull=False
     )
-    if species:
-        species = species.split(',')
-        wood_dried = lots.filter(species__in=species).values('species').annotate(
-            total_quantity=Sum('quantity')
-        )
-        for wood in wood_dried:
-            data['total_wood_dried'].append({
-                'species': wood.get('species'),
-                'quantity': wood.get('total_quantity')
-            })
-    if chambers:
-        chambers = chambers.split(',')
-        chambers_quantities = lots.filter(chamber__in=chambers).values('chamber').annotate(
-            total_quantity=Sum('quantity')
-        )
-        for chamber_quantity in chambers_quantities:
-            data['total_chamber_quantity_dried'].append({
-                'chamber': chamber_quantity.get('chamber'),
-                'quantity': chamber_quantity.get('total_quantity')
-            })
-        chamber_data = StatusReport.objects.filter(
-            chamber__in=chambers, server_time__range=[start, end]
-        ).order_by('chamber', 'server_time')
-        operating_time_dict = {}
-        idle_time_dict = {}
-        prev_server_time = {}
 
-        for report in chamber_data:
-            chamber_id = report.chamber
+    wood_dried = lots.values('species').annotate(total_quantity=Sum('quantity'))
+    for wood in wood_dried:
+        data['total_wood_dried'].append({
+            'x': wood.get('species'),
+            'y': wood.get('total_quantity')
+        })
 
-            if chamber_id not in operating_time_dict:
-                operating_time_dict[chamber_id] = timedelta()
+    chambers_quantities = lots.values('chamber').annotate(total_quantity=Sum('quantity'))
+    for chamber_quantity in chambers_quantities:
+        data['total_chamber_quantity_dried'].append({
+            'x': chamber_quantity.get('chamber'),
+            'y': chamber_quantity.get('total_quantity')
+        })
+    chambers_status = StatusReport.objects.filter(server_time__range=[start, end]).order_by('chamber', 'server_time')
+    operating_time_dict = {}
+    idle_time_dict = {}
+    prev_server_time = {}
 
-            if chamber_id not in idle_time_dict:
-                idle_time_dict[chamber_id] = timedelta()
+    for report in chambers_status:
+        chamber_id = report.chamber
 
-            if chamber_id in prev_server_time:
-                time_diff = report.server_time - prev_server_time[chamber_id]
-            else:
-                time_diff = timedelta()
+        if chamber_id not in operating_time_dict:
+            operating_time_dict[chamber_id] = timedelta()
 
-            if report.status_code > 0:
-                idle_time_dict[chamber_id] += time_diff
-            else:
-                operating_time_dict[chamber_id] += time_diff
+        if chamber_id not in idle_time_dict:
+            idle_time_dict[chamber_id] = timedelta()
 
-            prev_server_time[chamber_id] = report.server_time
-        use_rate_dict = {}
-        for chamber_id in chambers:
-            total_time = operating_time_dict[int(chamber_id)] + idle_time_dict[int(chamber_id)]
-            use_rate = 100.0 * ((total_time - idle_time_dict[int(chamber_id)]) / total_time) if total_time.total_seconds() != 0 else 0.0
-            use_rate_dict[chamber_id] = use_rate
-        data.update({
-            'operation_time': operating_time_dict,
-            'idle_time': idle_time_dict,
-            'total_use_rate': use_rate_dict})
+        if chamber_id in prev_server_time:
+            time_diff = report.server_time - prev_server_time[chamber_id]
+        else:
+            time_diff = timedelta()
+
+        if report.status_code > 0:
+            idle_time_dict[chamber_id] += time_diff
+        else:
+            operating_time_dict[chamber_id] += time_diff
+
+        prev_server_time[chamber_id] = report.server_time
+
+    use_rate_dict = {}
+    for chamber_id in chambers_status.values_list('chamber', flat=True):
+        total_time = operating_time_dict[int(chamber_id)] + idle_time_dict[int(chamber_id)]
+        use_rate = 100.0 * ((total_time - idle_time_dict[int(chamber_id)]) / total_time) if total_time.total_seconds() != 0 else 0.0
+        use_rate_dict[chamber_id] = use_rate
+    data.update({
+        'operation_time': operating_time_dict,
+        'idle_time': idle_time_dict,
+        'total_use_rate': use_rate_dict})
 
     return Response(data, status=status.HTTP_200_OK)
