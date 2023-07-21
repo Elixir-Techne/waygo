@@ -1,13 +1,11 @@
 // Argon Dashboard 2 MUI Base Styles
 import colors from "assets/theme-dark/base/colors";
-import typography from "assets/theme-dark/base/typography";
 import borders from "assets/theme-dark/base/borders";
 
 // Soft UI Dashboard PRO helper functions
 
-const { dark, background, grey, inputColors } = colors;
-const { size, fontWeightRegular } = typography;
-const { borderWidth, borderRadius } = borders;
+const { dark } = colors;
+const { borderRadius } = borders;
 
 const inputBase = {
   styleOverrides: {

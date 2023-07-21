@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { Grid } from "@mui/material";
 import { useArgonController } from "context";
 import ArgonTypography from "components/ArgonTypography";
+import print from "assets/images/print.svg";
 
 const Statistics = () => {
   const [controller] = useArgonController();
@@ -25,6 +26,11 @@ const Statistics = () => {
     chart: {
       width: "100%",
       height: 400,
+      toolbar: {
+        tools: {
+          download: `<img src=${print} alt="print" width="16px"/>`,
+        },
+      },
     },
     stroke: {
       curve: "smooth",
@@ -38,10 +44,7 @@ const Statistics = () => {
       type: "category",
     },
     plotOptions: {
-      bar: {
-        columnWidth: 40,
-        borderRadius: 5,
-      },
+      bar: {},
     },
     colors: ["#2E93fA", "#66DA26", "#546E7A", "#7be3af", "#c5206ab5"],
   });
@@ -71,12 +74,12 @@ const Statistics = () => {
       <ArgonBox sx={{ gap: "10px", display: "flex" }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            label="Select Start Date"
+            label="Start Date"
             value={start}
             onChange={(newValue) => setStart(newValue)}
           />
           <DatePicker
-            label="Select End Date"
+            label="End Date"
             value={end}
             onChange={(newValue) => setEnd(newValue)}
           />

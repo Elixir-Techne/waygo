@@ -1,31 +1,10 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-/**
- * The base box-shadow styles for the Argon Dashboard 2 MUI.
- * You can add new box-shadow using this file.
- * You can customized the box-shadow for the entire Argon Dashboard 2 MUI using thie file.
- */
-
 // Argon Dashboard 2 MUI Base Styles
 import colors from "assets/theme-dark/base/colors";
 
 // Argon Dashboard 2 MUI Helper Functions
 import boxShadow from "assets/theme-dark/functions/boxShadow";
 
-const { black, white, info, tabs, dark, text } = colors;
+const { black, info, dark } = colors;
 
 const boxShadows = {
   xs: boxShadow([0, 2], [9, -5], black.main, 0.15),
@@ -45,12 +24,13 @@ const boxShadows = {
   xl: boxShadow([0, 23], [45, -11], black.main, 0.25),
   xxl: boxShadow([0, 20], [27, 0], black.main, 0.05),
   inset: boxShadow([0, 1], [2, 0], black.main, 0.075, "inset"),
-  navbarBoxShadow: `${boxShadow([0, 0], [1, 1], black.main, 0.9, "inset")}, ${boxShadow(
-    [0, 20],
-    [27, 0],
+  navbarBoxShadow: `${boxShadow(
+    [0, 0],
+    [1, 1],
     black.main,
-    0.05
-  )}`,
+    0.9,
+    "inset"
+  )}, ${boxShadow([0, 20], [27, 0], black.main, 0.05)}`,
   cardBoxShadow: `${boxShadow([0, 0], [16, 0], black.main, 0.075)}`,
   buttonBoxShadow: {
     main: `${boxShadow([0, 4], [6, 0], dark.main, 0.1)}, ${boxShadow(

@@ -21,9 +21,6 @@ import App from "App";
 // Soft UI Context Provider
 import { ArgonControllerProvider } from "context";
 
-// react-perfect-scrollbar component
-import PerfectScrollbar from "react-perfect-scrollbar";
-
 // react-perfect-scrollbar styles
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "./global.css";

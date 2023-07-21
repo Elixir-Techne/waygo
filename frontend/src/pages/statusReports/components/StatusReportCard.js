@@ -1,25 +1,30 @@
 import { Card, CardContent, CardHeader, useMediaQuery } from "@mui/material";
-import { typography } from "@mui/system";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import React from "react";
-import { Controller } from "swiper";
 import { getChamberStatus } from "utils/helper";
-
+import dayjs from "dayjs";
+import styled from "styled-components";
 const typographyProps = {
   fontWeight: "medium",
   color: "white",
+  display: "flex",
 };
+
+const TypoGraphyLabel = styled(ArgonTypography)({
+  color: "lightgray",
+  fontSize: "1.2rem",
+  marginRight: "1rem",
+});
+
 const StatusReportCard = ({ data }) => {
   const status = getChamberStatus(data?.lot?.status_code);
   const isMobile = useMediaQuery("(max-width:475px)");
-  const { darkMode } = Controller;
   return (
     <Card
       sx={{
         flex: 1,
         background: "transparent",
-        boxShadow: "none",
         minWidth: isMobile ? "260px" : "350px",
         backgroundColor: status === "idel" ? "blue" : "green",
         boxShadow: "0px 0px 5px 2px lightgray",
@@ -36,39 +41,57 @@ const StatusReportCard = ({ data }) => {
         }
       />
       <CardContent>
-        <ArgonTypography {...typographyProps}>Last Report:</ArgonTypography>
         <ArgonTypography {...typographyProps}>
-          Status: {getChamberStatus(data?.lot?.status_code)}
+          <TypoGraphyLabel>Last Report:</TypoGraphyLabel>
+        </ArgonTypography>
+        <ArgonTypography {...typographyProps}>
+          <TypoGraphyLabel>Status:</TypoGraphyLabel>
+          {getChamberStatus(data?.lot?.status_code)}
         </ArgonTypography>
         {!status === "idel" ? (
           <>
             <ArgonTypography {...typographyProps}>
-              Species: {data?.lot?.species}
+              <TypoGraphyLabel>Species:</TypoGraphyLabel>
+              {data?.lot?.species}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
-              Quantity: {data?.lot?.quantity}
+              <TypoGraphyLabel>Quantity:</TypoGraphyLabel>
+              {data?.lot?.quantity}
             </ArgonTypography>
-            <ArgonTypography {...typographyProps}>RH:</ArgonTypography>
+            <ArgonTypography {...typographyProps}>
+              <TypoGraphyLabel>RH:</TypoGraphyLabel>
+            </ArgonTypography>
             <ArgonBox display="flex" justifyContent="space-between">
-              <ArgonTypography {...typographyProps}>DBTI:</ArgonTypography>
-              <ArgonTypography {...typographyProps}>WBTI:</ArgonTypography>
+              <ArgonTypography {...typographyProps}>
+                <TypoGraphyLabel>DBTI:</TypoGraphyLabel>
+              </ArgonTypography>
+              <ArgonTypography {...typographyProps}>
+                <TypoGraphyLabel>WBTI:</TypoGraphyLabel>
+              </ArgonTypography>
             </ArgonBox>
-            <ArgonTypography {...typographyProps}>AMC:</ArgonTypography>
             <ArgonTypography {...typographyProps}>
-              Current Command:
+              <TypoGraphyLabel>AMC:</TypoGraphyLabel>
             </ArgonTypography>
-            <ArgonTypography {...typographyProps}>Start time:</ArgonTypography>
             <ArgonTypography {...typographyProps}>
-              Time ellapsed:
+              <TypoGraphyLabel>Current Command:</TypoGraphyLabel>
+            </ArgonTypography>
+            <ArgonTypography {...typographyProps}>
+              S<TypoGraphyLabel>tart time:</TypoGraphyLabel>
+            </ArgonTypography>
+            <ArgonTypography {...typographyProps}>
+              <TypoGraphyLabel>Time ellapsed:</TypoGraphyLabel>
             </ArgonTypography>
           </>
         ) : (
           <>
             <ArgonTypography {...typographyProps}>
-              Last completed lot:
+              <TypoGraphyLabel>Last completed lot:</TypoGraphyLabel>
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
-              Idel for:{data?.time}
+              <TypoGraphyLabel>Idel for:</TypoGraphyLabel>
+              {`${dayjs().format("D")}days,${dayjs().format(
+                "H"
+              )}hours,${dayjs().format("m")}mins`}
             </ArgonTypography>
           </>
         )}

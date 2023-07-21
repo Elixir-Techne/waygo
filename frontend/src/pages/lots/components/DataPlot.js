@@ -10,6 +10,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArgonButton from "components/ArgonButton";
 import { useNavigate } from "react-router-dom";
 import { useArgonController } from "context";
+import print from "assets/images/print.svg";
 
 const keys = ["rh", "amc", "wbt1", "dbt1", "wood_temp1"];
 
@@ -28,6 +29,11 @@ export const LotsDataPlot = ({ lotID }) => {
       type: "line",
       width: "100%",
       height: 400,
+      toolbar: {
+        tools: {
+          download: `<img src=${print} alt="print" width="16px"/>`,
+        },
+      },
     },
     stroke: {
       curve: "smooth",
@@ -42,7 +48,7 @@ export const LotsDataPlot = ({ lotID }) => {
     fontWeight: "medium",
   };
   const { data: lotData } = useQuery([`${Endpoints.lots}${lotID}/`]);
-  const { data, isLoading } = useQuery([
+  const { data } = useQuery([
     `${Endpoints.lots}${lotID}/lot-data/`,
     { get_all: true },
   ]);
@@ -56,7 +62,7 @@ export const LotsDataPlot = ({ lotID }) => {
 
   useEffect(() => {
     if (data) {
-      const temp = data?.results?.reduce((acc, curr) => {
+      const temp = data?.reduce((acc, curr) => {
         keys.forEach((key) => {
           const obj = {
             x: moment(curr.time).format("YYYY-MM-DD"),
@@ -73,9 +79,7 @@ export const LotsDataPlot = ({ lotID }) => {
       setSeries(Object.entries(temp).map(([k, v]) => ({ name: k, data: v })));
     }
   }, [data]);
-  if (isLoading) {
-    return <h1>loading...</h1>;
-  }
+
   return (
     <ArgonBox>
       <ArgonButton
@@ -90,7 +94,7 @@ export const LotsDataPlot = ({ lotID }) => {
       <Chart height="500px" options={options} series={series} />
       <ArgonBox mt={2}>
         <ArgonTypography {...typographyProps}>
-          Chamber:{lotData?.chamber}
+          Chamber: {lotData?.chamber}
         </ArgonTypography>
         <ArgonTypography {...typographyProps}>
           Lot ID: {lotData?.id}
