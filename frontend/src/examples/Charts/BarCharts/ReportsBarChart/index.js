@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useMemo } from "react";
 
 // porp-types is a library for typechecking of props
@@ -44,7 +29,10 @@ function ReportsBarChart({ color, title, description, chart, items }) {
         color={color}
         icon={{ color: icon.color, component: icon.component }}
         label={label}
-        progress={{ content: progress.content, percentage: progress.percentage }}
+        progress={{
+          content: progress.content,
+          percentage: progress.percentage,
+        }}
       />
     </Grid>
   ));
@@ -70,10 +58,19 @@ function ReportsBarChart({ color, title, description, chart, items }) {
         )}
         <ArgonBox px={1}>
           <ArgonBox mb={2}>
-            <ArgonTypography variant="h6" fontWeight="medium" textTransform="capitalize">
+            <ArgonTypography
+              variant="h6"
+              fontWeight="medium"
+              textTransform="capitalize"
+            >
               {title}
             </ArgonTypography>
-            <ArgonTypography component="div" variant="button" color="text" fontWeight="regular">
+            <ArgonTypography
+              component="div"
+              variant="button"
+              color="text"
+              fontWeight="regular"
+            >
               {description}
             </ArgonTypography>
           </ArgonBox>
@@ -97,10 +94,20 @@ ReportsBarChart.defaultProps = {
 
 // Typechecking props for the ReportsBarChart
 ReportsBarChart.propTypes = {
-  color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
+  color: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "info",
+    "success",
+    "warning",
+    "error",
+    "dark",
+  ]),
   title: PropTypes.string.isRequired,
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  chart: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.array, PropTypes.object])).isRequired,
+  chart: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+  ).isRequired,
   items: PropTypes.arrayOf(PropTypes.object),
 };
 

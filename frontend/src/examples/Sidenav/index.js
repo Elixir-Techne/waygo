@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 // react-router-dom components
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, Link } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -9,7 +9,6 @@ import PropTypes from "prop-types";
 // @mui material components
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
 
 // Argon Dashboard 2 MUI components
@@ -23,32 +22,46 @@ import SidenavItem from "examples/Sidenav/SidenavItem";
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
 
+//mui icon
+import SummarizeIcon from "@mui/icons-material/Summarize";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import HistoryIcon from "@mui/icons-material/History";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import ComputerIcon from "@mui/icons-material/Computer";
+import HelpCenterIcon from "@mui/icons-material/HelpCenter";
+
 // Argon Dashboard 2 MUI context
 import { useArgonController, setMiniSidenav } from "context";
 
 const routes = [
   {
     title: "Status Reports",
+    icon: <SummarizeIcon />,
     path: "/",
   },
   {
     title: "Ongoing Lots",
+    icon: <PrecisionManufacturingIcon />,
     path: "/ongoing-lots",
   },
   {
     title: "Historical Lots",
+    icon: <HistoryIcon />,
     path: "/historical-lots",
   },
   {
     title: "Statistics",
+    icon: <AssessmentIcon />,
     path: "/statistics",
   },
   {
     title: "Technology",
+    icon: <ComputerIcon />,
     path: "/technology",
   },
   {
     title: "Help",
+    icon: <HelpCenterIcon />,
     path: "/help",
   },
 ];
@@ -57,7 +70,6 @@ function Sidenav({ color, brand, brandName, ...rest }) {
   const { miniSidenav, darkSidenav, layout } = controller;
   const location = useLocation();
   const { pathname } = location;
-  const itemName = pathname.split("/").slice(1)[0];
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
@@ -80,10 +92,17 @@ function Sidenav({ color, brand, brandName, ...rest }) {
   }, [dispatch, location]);
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
-  const renderRoutes = routes.map(({ path, title }) => {
+  const renderRoutes = routes.map((item) => {
     return (
-      <Link href={path} key={path} rel="noreferrer">
-        <SidenavItem name={title} active={path === itemName} />
+      <Link to={item.path} key={item.path} rel="noreferrer">
+        <SidenavItem
+          name={item.title}
+          active={
+            (pathname.includes(item.path) && item.path !== "/") ||
+            item.path === pathname
+          }
+          icon={item.icon}
+        />
       </Link>
     );
   });
@@ -94,7 +113,7 @@ function Sidenav({ color, brand, brandName, ...rest }) {
       variant="permanent"
       ownerState={{ darkSidenav, miniSidenav, layout }}
     >
-      <ArgonBox pt={3} pb={1} px={4} textAlign="center">
+      <ArgonBox pt={3} pb={1} px={5} textAlign="center">
         <ArgonBox
           display={{ xs: "block", xl: "none" }}
           position="absolute"

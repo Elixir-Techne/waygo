@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // react-router components
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -16,20 +16,18 @@ import Icon from "@mui/material/Icon";
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
-import ArgonInput from "components/ArgonInput";
 
 // Argon Dashboard 2 MUI example components
 import Breadcrumbs from "examples/Breadcrumbs";
-import NotificationItem from "examples/Items/NotificationItem";
+
+import PublicIcon from "@mui/icons-material/Public";
 
 // Custom styles for DashboardNavbar
 import {
   navbar,
   navbarContainer,
   navbarRow,
-  navbarIconButton,
   navbarDesktopMenu,
-  navbarMobileMenu,
 } from "examples/Navbars/DashboardNavbar/styles";
 
 // Argon Dashboard 2 MUI context
@@ -37,32 +35,24 @@ import {
   useArgonController,
   setTransparentNavbar,
   setMiniSidenav,
-  setOpenConfigurator,
 } from "context";
 
 // Images
-import team2 from "assets/images/team-2.jpg";
-import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import DarkModeSwitcher from "components/DarkModeSwitcher";
-import { FormControlLabel, Stack } from "@mui/material";
+import { MenuItem, Stack, useMediaQuery } from "@mui/material";
 import { setDarkSidenav } from "context";
 import { setDarkMode } from "context";
 import { getUser } from "utils/helper";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   const [controller, dispatch] = useArgonController();
-  const {user,company} = getUser()
+  const { user, company } = getUser();
+  const isMobile = useMediaQuery("(max-width:475px)");
 
-  const {
-    miniSidenav,
-    transparentNavbar,
-    fixedNavbar,
-    openConfigurator,
-    darkMode,
-    sidenavColor,
-  } = controller;
-  const [openMenu, setOpenMenu] = useState(false);
+  const { miniSidenav, transparentNavbar, fixedNavbar, darkMode } = controller;
   const route = useLocation().pathname.split("/").slice(1);
 
   useEffect(() => {
@@ -95,14 +85,17 @@ function DashboardNavbar({ absolute, light, isMini }) {
   }, [dispatch, fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
-  const handleConfiguratorOpen = () =>
-    setOpenConfigurator(dispatch, !openConfigurator);
-  const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
-  const handleCloseMenu = () => setOpenMenu(false);
 
   const handleDarkMode = () => {
     setDarkSidenav(dispatch, !darkMode);
     setDarkMode(dispatch, !darkMode);
+  };
+  const handleGlobal = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(!anchorEl);
   };
 
   return (
@@ -111,48 +104,122 @@ function DashboardNavbar({ absolute, light, isMini }) {
       color="inherit"
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
     >
-      <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
-        <ArgonBox
-          color={light && transparentNavbar ? "white" : "dark"}
-          mb={{ xs: 1, md: 0 }}
-          sx={(theme) => navbarRow(theme, { isMini })}
-        ></ArgonBox>
-        {isMini ? null : (
-          <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <ArgonTypography
-              variant="button"
-              fontWeight="medium"
-              color={light && transparentNavbar ? "white" : "dark"}
-            >
-              {user.username}
-            </ArgonTypography>
-            <ArgonTypography
-              variant="button"
-              fontWeight="medium"
-              color={light && transparentNavbar ? "white" : "dark"}
-            >
-              {company.name}
-            </ArgonTypography>
-            <ArgonTypography
-              variant="button"
-              fontWeight="medium"
-              color={light && transparentNavbar ? "white" : "dark"}
-            >
-              EN/VI
-            </ArgonTypography>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <DarkModeSwitcher checked={darkMode} onChange={handleDarkMode} />
+      {isMobile ? (
+        <Breadcrumbs
+          icon="home"
+          title={route[route.length - 1]}
+          route={route}
+          light={transparentNavbar}
+        />
+      ) : null}
+      <ArgonBox
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <ArgonBox display="flex" flexDirection="row-reverse">
+          {!isMobile ? (
+            <Breadcrumbs
+              icon="home"
+              title={route[route.length - 1]}
+              route={route}
+              light={transparentNavbar ? light : false}
+            />
+          ) : null}
+          <Icon
+            fontSize="medium"
+            sx={
+              (navbarDesktopMenu,
+              { color: !darkMode ? "black" : "lightgray", marginRight: "1rem" })
+            }
+            onClick={handleMiniSidenav}
+          >
+            {!miniSidenav ? "menu_open" : "menu"}
+          </Icon>
+        </ArgonBox>
+        <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
+          {isMini ? null : (
+            <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
               <ArgonTypography
                 variant="button"
                 fontWeight="medium"
-                color={light && transparentNavbar ? "white" : "dark"}
+                // color={darkMode && transparentNavbar ? "dark" : "white"}
+                color={transparentNavbar ? "white" : "black"}
+                fontSize={isMobile ? "1rem" : "1.3rem"}
               >
-                Dark Mode
+                {user.username}
               </ArgonTypography>
-            </Stack>
-          </ArgonBox>
-        )}
-      </Toolbar>
+              <ArgonTypography
+                variant="button"
+                fontWeight="medium"
+                color={transparentNavbar ? "white" : "black"}
+                fontSize={isMobile ? "1rem" : "1.3rem"}
+              >
+                {company.name}
+              </ArgonTypography>
+              <ArgonTypography
+                variant="button"
+                fontWeight="medium"
+                color={transparentNavbar ? "white" : "black"}
+              >
+                <IconButton
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleGlobal}
+                >
+                  <PublicIcon
+                    fontSize="medium"
+                    color={transparentNavbar ? "white" : "black"}
+                    sx={{
+                      fill: transparentNavbar ? "#fff" : "#344767",
+                      cursor: "pointer",
+                    }}
+                  />
+                </IconButton>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                  sx={{
+                    width: "6rem",
+                    "& . hover": {
+                      width: "10rem",
+                    },
+                  }}
+                >
+                  <MenuItem onClick={handleClose} sx={{ width: "100%" }}>
+                    EN
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>VI</MenuItem>
+                </Menu>
+              </ArgonTypography>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <DarkModeSwitcher
+                  checked={darkMode}
+                  onChange={handleDarkMode}
+                />
+                <ArgonTypography
+                  variant="button"
+                  fontWeight="medium"
+                  color={transparentNavbar ? "white" : "black"}
+                  fontSize={isMobile ? "0.8rem" : "1rem"}
+                >
+                  Dark Mode
+                </ArgonTypography>
+              </Stack>
+            </ArgonBox>
+          )}
+        </Toolbar>
+      </ArgonBox>
     </AppBar>
   );
 }

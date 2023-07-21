@@ -1,5 +1,3 @@
-
-
 import { useEffect } from "react";
 
 // react-router-dom components
@@ -22,7 +20,7 @@ function PageLayout({ background, children }) {
 
   useEffect(() => {
     setLayout(dispatch, "page");
-  }, [pathname]);
+  }, [pathname, dispatch]);
 
   return (
     <ArgonBox

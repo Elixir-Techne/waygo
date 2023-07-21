@@ -26,7 +26,9 @@ httpService.interceptors.response.use(
 );
 
 export const getQuery = async ({ queryKey }) => {
-  const response = await httpService.get(queryKey[0], { params: queryKey[1] });
+  const response = await httpService.get(queryKey[0], {
+    params: queryKey[1],
+  });
   return response.data;
 };
 
@@ -36,4 +38,8 @@ export const Endpoints = {
   auth: "/auth/login/",
   refrsh: "/auth/refresh-token/",
   statusReport: "/status-report/chamber-latest-status/",
+  ongoingLots: "/lots/ongoing-lot/",
+  historicalLots: "/lots/historical-lot/",
+  lots: "lots/",
+  statistics: "/statistic/",
 };

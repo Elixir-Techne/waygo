@@ -27,7 +27,7 @@ const input = {
   styleOverrides: {
     root: {
       display: "flex !important",
-      padding: `${pxToRem(8)} ${pxToRem(12)}`,
+      // padding: `${pxToRem(8)} ${pxToRem(12)}`,
       border: `${borderWidth[1]} solid ${inputColors.borderColor.main}`,
       borderRadius: `${borderRadius.md} !important`,
 

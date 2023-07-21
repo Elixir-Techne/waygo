@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 
 // react-router-dom components
@@ -20,7 +19,7 @@ function DashboardLayout({ bgColor, children, ...rest }) {
 
   useEffect(() => {
     setLayout(dispatch, "dashboard");
-  }, [pathname]);
+  }, [pathname, dispatch]);
 
   const background = darkMode && !bgColor ? "transparent" : bgColor;
 
@@ -28,7 +27,7 @@ function DashboardLayout({ bgColor, children, ...rest }) {
     <ArgonBox
       sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
         p: 3,
-
+        height: "100vh",
         [breakpoints.up("xl")]: {
           marginLeft: miniSidenav ? pxToRem(120) : pxToRem(274),
           transition: transitions.create(["margin-left", "margin-right"], {

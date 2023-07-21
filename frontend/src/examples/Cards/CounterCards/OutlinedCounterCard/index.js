@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// react-countup components
 import CountUp from "react-countup";
 
 // prop-types is a library for typechecking of props
@@ -38,7 +22,12 @@ function OutlinedCounterCard({ color, count, title, prefix, suffix }) {
       textAlign="center"
       py={2}
     >
-      <ArgonTypography variant="h6" color={color} fontWeight="medium" textTransform="capitalize">
+      <ArgonTypography
+        variant="h6"
+        color={color}
+        fontWeight="medium"
+        textTransform="capitalize"
+      >
         {title}
       </ArgonTypography>
       <ArgonTypography variant="h4" fontWeight="bold">
@@ -69,7 +58,15 @@ OutlinedCounterCard.defaultProps = {
 
 // Typechecking props for the BlogCard
 OutlinedCounterCard.propTypes = {
-  color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
+  color: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "info",
+    "success",
+    "warning",
+    "error",
+    "dark",
+  ]),
   count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   title: PropTypes.string.isRequired,
   prefix: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),

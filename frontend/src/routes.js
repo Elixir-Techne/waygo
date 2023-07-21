@@ -1,11 +1,10 @@
 import StatusReports from "pages/statusReports";
-import { OngoingLots } from "pages/ongoingLots";
-import HistoricalLots from "pages/historicalLots";
 import Statistics from "pages/statistics";
 import Technology from "pages/technology";
 import DashboardLayout from "layouts/dashboard";
 import { Navigate, useRoutes } from "react-router-dom";
 import SignIn from "layouts/authentication/sign-in";
+import { Lots } from "pages/lots";
 
 export const routes = (loggedIn = false) => [
   {
@@ -26,11 +25,15 @@ export const routes = (loggedIn = false) => [
       },
       {
         path: "/ongoing-lots",
-        element: <OngoingLots />,
+        element: <Lots />,
+      },
+      {
+        path: "/:state/:view/:id",
+        element: <Lots />,
       },
       {
         path: "/historical-lots",
-        element: <HistoricalLots />,
+        element: <Lots />,
       },
       {
         path: "/statistics",
@@ -38,6 +41,10 @@ export const routes = (loggedIn = false) => [
       },
       {
         path: "/technology",
+        element: <Technology />,
+      },
+      {
+        path: "/help",
         element: <Technology />,
       },
     ],

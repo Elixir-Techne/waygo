@@ -1,19 +1,3 @@
-/* eslint-disable no-param-reassign */
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
 
 // prop-types is a library for typechecking of props.
@@ -47,7 +31,8 @@ function DefaultNavbar({ brand, transparent, light, action }) {
   const [mobileNavbar, setMobileNavbar] = useState(false);
   const [mobileView, setMobileView] = useState(false);
 
-  const openMobileNavbar = ({ currentTarget }) => setMobileNavbar(currentTarget.parentNode);
+  const openMobileNavbar = ({ currentTarget }) =>
+    setMobileNavbar(currentTarget.parentNode);
   const closeMobileNavbar = () => setMobileNavbar(false);
 
   useEffect(() => {
@@ -100,20 +85,44 @@ function DefaultNavbar({ brand, transparent, light, action }) {
           backdropFilter: transparent ? "none" : `saturate(200%) blur(30px)`,
         })}
       >
-        <ArgonBox display="flex" justifyContent="space-between" alignItems="center" px={2}>
-          <ArgonBox component={Link} to="/" py={transparent ? 1.5 : 0.75} lineHeight={1}>
-            <ArgonTypography variant="button" fontWeight="bold" color={light ? "white" : "dark"}>
+        <ArgonBox
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          px={2}
+        >
+          <ArgonBox
+            component={Link}
+            to="/"
+            py={transparent ? 1.5 : 0.75}
+            lineHeight={1}
+          >
+            <ArgonTypography
+              variant="button"
+              fontWeight="bold"
+              color={light ? "white" : "dark"}
+            >
               {brand}
             </ArgonTypography>
           </ArgonBox>
-          <ArgonBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
+          <ArgonBox
+            color="inherit"
+            display={{ xs: "none", lg: "flex" }}
+            m={0}
+            p={0}
+          >
             <DefaultNavbarLink
               icon="donut_large"
               name="dashboard"
               route="/dashboard"
               light={light}
             />
-            <DefaultNavbarLink icon="person" name="profile" route="/profile" light={light} />
+            <DefaultNavbarLink
+              icon="person"
+              name="profile"
+              route="/profile"
+              light={light}
+            />
             <DefaultNavbarLink
               icon="account_circle"
               name="sign up"
@@ -169,7 +178,9 @@ function DefaultNavbar({ brand, transparent, light, action }) {
           </ArgonBox>
         </ArgonBox>
       </ArgonBox>
-      {mobileView && <DefaultNavbarMobile open={mobileNavbar} close={closeMobileNavbar} />}
+      {mobileView && (
+        <DefaultNavbarMobile open={mobileNavbar} close={closeMobileNavbar} />
+      )}
     </Container>
   );
 }

@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// react-router components
 import { Link } from "react-router-dom";
 
 // prop-types is a library for typechecking of props
@@ -83,11 +67,21 @@ function TransparentBlogCard({ image, title, description, action }) {
     >
       {action.type === "internal" ? (
         <Link to={action.route}>
-          <CardMedia src={image} component="img" title={title} sx={cardImageStyles} />
+          <CardMedia
+            src={image}
+            component="img"
+            title={title}
+            sx={cardImageStyles}
+          />
         </Link>
       ) : (
         <MuiLink href={action.route} target="_blank" rel="noreferrer">
-          <CardMedia src={image} component="img" title={title} sx={cardImageStyles} />
+          <CardMedia
+            src={image}
+            component="img"
+            title={title}
+            sx={cardImageStyles}
+          />
         </MuiLink>
       )}
       <ArgonBox py={3}>
@@ -98,7 +92,12 @@ function TransparentBlogCard({ image, title, description, action }) {
             </ArgonTypography>
           </Link>
         ) : (
-          <MuiLink href={action.route} target="_blank" rel="noreferrer" sx={cardActionStyles}>
+          <MuiLink
+            href={action.route}
+            target="_blank"
+            rel="noreferrer"
+            sx={cardActionStyles}
+          >
             <ArgonTypography variant="h5" gutterBottom>
               {title}
             </ArgonTypography>
@@ -122,7 +121,12 @@ function TransparentBlogCard({ image, title, description, action }) {
             </ArgonTypography>
           </Link>
         ) : (
-          <MuiLink href={action.route} target="_blank" rel="noreferrer" sx={cardActionStyles}>
+          <MuiLink
+            href={action.route}
+            target="_blank"
+            rel="noreferrer"
+            sx={cardActionStyles}
+          >
             <ArgonTypography
               variant="body2"
               color={action.color}

@@ -5,18 +5,21 @@ import PropTypes from "prop-types";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Icon from "@mui/material/Icon";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 
 // Custom styles for the sidenavItem
-import { item, itemIcon, itemText, itemIconBox } from "examples/Sidenav/styles/sidenavItem";
+import {
+  item,
+  itemText,
+  itemIconBox,
+} from "examples/Sidenav/styles/sidenavItem";
 
 // Argon Dashboard 2 MUI context
 import { useArgonController } from "context";
 
-function SidenavItem({ name, active, open, ...rest }) {
+function SidenavItem({ icon, name, active, open, ...rest }) {
   const [controller] = useArgonController();
   const { miniSidenav, darkSidenav, sidenavColor } = controller;
 
@@ -25,15 +28,23 @@ function SidenavItem({ name, active, open, ...rest }) {
       <ListItem component="li">
         <ArgonBox
           {...rest}
-          sx={(theme) => item(theme, { active, darkSidenav, sidenavColor, miniSidenav })}
+          sx={(theme) =>
+            item(theme, { active, darkSidenav, sidenavColor, miniSidenav })
+          }
         >
           <ListItemIcon
-            sx={(theme) => itemIconBox(theme, { active, darkSidenav, sidenavColor })}
-          ></ListItemIcon>
+            sx={(theme) =>
+              itemIconBox(theme, { active, darkSidenav, sidenavColor })
+            }
+          >
+            {icon}
+          </ListItemIcon>
 
           <ListItemText
             primary={name}
-            sx={(theme) => itemText(theme, { miniSidenav, darkSidenav, active })}
+            sx={(theme) =>
+              itemText(theme, { miniSidenav, darkSidenav, active })
+            }
           />
         </ArgonBox>
       </ListItem>
@@ -50,7 +61,15 @@ SidenavItem.defaultProps = {
 
 // Typechecking props for the SidenavItem
 SidenavItem.propTypes = {
-  color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
+  color: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "info",
+    "success",
+    "warning",
+    "error",
+    "dark",
+  ]),
   icon: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
   active: PropTypes.bool,
