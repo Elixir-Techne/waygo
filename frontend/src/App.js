@@ -44,13 +44,10 @@ export default function App() {
   }, [pathname]);
 
   useEffect(() => {
-    const token = localStorage.getItem("refresh_token");
     const refreshAuthLogic = () =>
       httpService
-        .post(Endpoints.refresh, null, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        .post(Endpoints.refresh, {
+          refresh: localStorage.getItem("refresh_token"),
         })
         .then(({ data }) => {
           localStorage.setItem("access_token", data?.access);
