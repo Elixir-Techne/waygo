@@ -5,6 +5,10 @@ import React from "react";
 import { getChamberStatus } from "utils/helper";
 import dayjs from "dayjs";
 import styled from "@emotion/styled";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
 const typographyProps = {
   fontWeight: "medium",
   color: "white",
@@ -21,6 +25,11 @@ const TypoGraphyLabel = styled(ArgonTypography)({
 const StatusReportCard = ({ data }) => {
   const status = getChamberStatus(data?.lot?.status_code);
   const isMobile = useMediaQuery("(max-width:475px)");
+  const diff =
+    data?.lot?.start_time && data?.lot?.complete_time
+      ? dayjs(data?.lot?.complete_time).diff(data?.lot?.start_time)
+      : undefined;
+
   return (
     <Card
       sx={{
@@ -49,50 +58,68 @@ const StatusReportCard = ({ data }) => {
           <TypoGraphyLabel>Status:</TypoGraphyLabel>
           {getChamberStatus(data?.lot?.status_code)}
         </ArgonTypography>
-        {!status === "idel" ? (
+        {status !== "Idle" ? (
           <>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Species:</TypoGraphyLabel>
-              {data?.lot?.species}
+              {data?.latest_lot_data?.species}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Quantity:</TypoGraphyLabel>
-              {data?.lot?.quantity}
+              {data?.latest_lot_data?.quantity}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>RH:</TypoGraphyLabel>
+              {data?.latest_lot_data?.rh}
             </ArgonTypography>
             <ArgonBox display="flex" justifyContent="space-between">
               <ArgonTypography {...typographyProps}>
                 <TypoGraphyLabel>DBTI:</TypoGraphyLabel>
+                {data?.latest_lot_data?.dbt1}
               </ArgonTypography>
               <ArgonTypography {...typographyProps}>
                 <TypoGraphyLabel>WBTI:</TypoGraphyLabel>
+                {data?.latest_lot_data?.wbt1}
               </ArgonTypography>
             </ArgonBox>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>AMC:</TypoGraphyLabel>
+              {data?.latest_lot_data?.amc1}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Current Command:</TypoGraphyLabel>
+              {data?.latest_lot_data?.command_name}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
-              S<TypoGraphyLabel>tart time:</TypoGraphyLabel>
+              <TypoGraphyLabel>Start time:</TypoGraphyLabel>
+              {data?.lot?.start_time
+                ? dayjs(data?.lot?.start_time).format("YYYY-MM-DD")
+                : ""}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Time ellapsed:</TypoGraphyLabel>
+              {data?.lot?.start_time && data?.lot?.complete_time
+                ? `${dayjs(data?.lot?.complete_time).from(
+                    data?.lot?.start_time,
+                    true
+                  )}`
+                : ""}
             </ArgonTypography>
           </>
         ) : (
           <>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Last completed lot:</TypoGraphyLabel>
+              {data?.lot?.id}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Idel for:</TypoGraphyLabel>
-              {`${dayjs().format("D")}days,${dayjs().format(
-                "H"
-              )}hours,${dayjs().format("m")}mins`}
+              {data?.lot?.start_time && data?.lot?.complete_time
+                ? `${dayjs(data?.lot?.complete_time).from(
+                    data?.lot?.start_time,
+                    true
+                  )}`
+                : ""}
             </ArgonTypography>
           </>
         )}

@@ -158,7 +158,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 color={transparentNavbar ? "white" : "black"}
                 fontSize={isMobile ? "1rem" : "1.3rem"}
               >
-                {user.username}
+                {user?.username}
               </ArgonTypography>
               <ArgonTypography
                 variant="button"
@@ -166,7 +166,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 color={transparentNavbar ? "white" : "black"}
                 fontSize={isMobile ? "1rem" : "1.3rem"}
               >
-                {company.name}
+                {company?.name}
               </ArgonTypography>
               <ArgonTypography
                 variant="button"
