@@ -45,6 +45,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     'drf_yasg',
     'django_filters',
+    "corsheaders",
 ]
 
 PROJECT_APPS = [
@@ -56,6 +57,7 @@ INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -162,3 +164,16 @@ REST_AUTH_SERIALIZERS = {
 }
 
 DEFAULT_DAYS = env.int('WG_DEFAULT_DAYS', default=90)
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    }
+}
