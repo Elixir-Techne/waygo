@@ -192,14 +192,16 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   sx={{
                     width: "6rem",
                     "& . hover": {
-                      width: "10rem",
+                      width: "6rem",
                     },
                   }}
                 >
-                  <MenuItem onClick={handleClose} sx={{ width: "100%" }}>
+                  <MenuItem onClick={handleClose} sx={{ minWidth: 0 }}>
                     EN
                   </MenuItem>
-                  <MenuItem onClick={handleClose}>VI</MenuItem>
+                  <MenuItem onClick={handleClose} sx={{ minWidth: 0 }}>
+                    VI
+                  </MenuItem>
                 </Menu>
               </ArgonTypography>
               <Stack direction="row" spacing={1} alignItems="center">

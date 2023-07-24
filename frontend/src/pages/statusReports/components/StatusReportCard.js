@@ -15,6 +15,7 @@ const TypoGraphyLabel = styled(ArgonTypography)({
   color: "lightgray",
   fontSize: "1.2rem",
   marginRight: "1rem",
+  whiteSpace: "nowrap",
 });
 
 const StatusReportCard = ({ data }) => {
