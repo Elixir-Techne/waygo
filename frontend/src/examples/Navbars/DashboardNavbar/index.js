@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // react-router components
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -43,6 +43,8 @@ import { MenuItem, Stack, useMediaQuery } from "@mui/material";
 import { setDarkSidenav } from "context";
 import { setDarkMode } from "context";
 import { getUser } from "utils/helper";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { removeAuthToken } from "utils/helper";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -54,6 +56,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   const { miniSidenav, transparentNavbar, fixedNavbar, darkMode } = controller;
   const route = useLocation().pathname.split("/").slice(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Setting the navbar type
@@ -96,6 +99,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   const handleClose = () => {
     setAnchorEl(!anchorEl);
+  };
+
+  const handleLogout = () => {
+    removeAuthToken();
+    navigate("/sign-in");
   };
 
   return (
@@ -217,6 +225,22 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 >
                   Dark Mode
                 </ArgonTypography>
+                <IconButton
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleLogout}
+                >
+                  <LogoutIcon
+                    fontSize="medium"
+                    color={transparentNavbar ? "white" : "black"}
+                    sx={{
+                      fill: transparentNavbar ? "#fff" : "#344767",
+                      cursor: "pointer",
+                    }}
+                  />
+                </IconButton>
               </Stack>
             </ArgonBox>
           )}
