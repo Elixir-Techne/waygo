@@ -53,10 +53,10 @@ export default function App() {
           },
         })
         .then(({ data }) => {
-          localStorage.setItem("access_token", data.data.access);
+          localStorage.setItem("access_token", data?.access);
           httpService.defaults.headers.common[
             "Authorization"
-          ] = `Bearer ${data.data.access}`;
+          ] = `Bearer ${data?.access}`;
           return Promise.resolve();
         })
         .catch((e) => {
