@@ -232,7 +232,9 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
     )
     def ongoing_lot(self, request):
         three_months_ago = timezone.now() - timedelta(days=settings.DEFAULT_DAYS)
-        ongoing_lot = Lot.objects.filter(complete_time__isnull=True, start_time__gte=three_months_ago)
+        ongoing_lot = self.filter_queryset(Lot.objects.filter(
+            complete_time__isnull=True, start_time__gte=three_months_ago
+        ))
         if self.request.query_params.get('get_all', 'False').lower() == 'true':
             return Response(self.get_serializer(instance=ongoing_lot, many=True).data, status=status.HTTP_200_OK)
         ongoing_lot = self.paginate_queryset(ongoing_lot)
@@ -245,9 +247,9 @@ class LotViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateMo
     )
     def historical_lot(self, request):
         three_months_ago = timezone.now() - timedelta(days=settings.DEFAULT_DAYS)
-        historical_lot = Lot.objects.filter(
+        historical_lot = self.filter_queryset(Lot.objects.filter(
             Q(complete_time__isnull=False) | Q(start_time__lt=three_months_ago)
-        )
+        ))
         if self.request.query_params.get('get_all', 'False').lower() == 'true':
             return Response(self.get_serializer(instance=historical_lot, many=True).data, status=status.HTTP_200_OK)
         historical_lot = self.paginate_queryset(historical_lot)
