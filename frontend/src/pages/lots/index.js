@@ -92,6 +92,15 @@ export const Lots = () => {
       width: 140,
     },
     {
+      field: "complete_time",
+      headerName: "Complete Time",
+      sortable: false,
+      // flex: 1,
+      width: 140,
+      renderCell: ({ row }) =>
+        row.complete_time ? dayjs(row.complete_time).format("YYYY-MM-DD") : "",
+    },
+    {
       field: "actions",
       type: "actions",
       sortable: false,

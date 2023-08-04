@@ -87,7 +87,7 @@ const Statistics = () => {
         </LocalizationProvider>
       </ArgonBox>
       {data ? (
-        <Grid container spacing={2} sx={{ marginTop: "2rem" }}>
+        <Grid container spacing={4} sx={{ marginTop: "2rem" }}>
           <Grid item xs={12}>
             <ArgonTypography>
               Wood of selected species dry out in the time frame (in cubic
@@ -127,7 +127,7 @@ const Statistics = () => {
               Chambers be in operation, operation vs idle time
             </ArgonTypography>
             <Chart
-              height="300px"
+              height="400px"
               options={{
                 ...options,
                 chart: {
