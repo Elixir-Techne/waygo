@@ -173,5 +173,48 @@ export default createTheme({
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          background: "#111c44",
+          backgroundColor: "#111c44 !important",
+          color: "white !important",
+          "& > *": {
+            color: "white !important",
+          },
+        },
+      },
+    },
+    MuiNativeSelect: {
+      styleOverrides: {
+        root: {},
+        select: {
+          "& option": {
+            backgroundColor: "#111c44 !important",
+          },
+        },
+      },
+    },
+    MuiDayCalendar: {
+      styleOverrides: {
+        weekDayLabel: {
+          color: "white ",
+        },
+      },
+    },
+    MuiPickersDay: {
+      styleOverrides: {
+        root: {
+          color: "white ",
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          color: "white",
+        },
+      },
+    },
   },
 });

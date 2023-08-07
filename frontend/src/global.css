@@ -21,3 +21,7 @@
   .css-100dcyg{
     padding:15px !important
   }
+
+.MuiDataGrid-footerContainer {
+  display: none !important;
+}
