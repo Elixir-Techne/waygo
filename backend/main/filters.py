@@ -4,11 +4,11 @@ from main.models import Lot
 
 
 class LotFilterSet(django_filter.FilterSet):
-    start_time = DateTimeFromToRangeFilter(field_name='start_time')
 
     class Meta:
         model = Lot
         fields = {
-            'species': ['in'],
-            'chamber': ['exact']
+            'species': ['exact'],
+            'chamber': ['exact'],
+            'start_time': ['lte', 'gte', 'lt', 'gt']
         }
