@@ -10,5 +10,6 @@ class LotFilterSet(django_filter.FilterSet):
         fields = {
             'species': ['exact'],
             'chamber': ['exact'],
-            'start_time': ['lte', 'gte', 'lt', 'gt']
+            'start_time': ['lte', 'gte', 'lt', 'gt'],
+            'complete_time': ['lte', 'gte', 'lt', 'gt']
         }
