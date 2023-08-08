@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import ExportToolBar from "examples/ExportToolBar";
 
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -28,6 +29,7 @@ const useUtilityClasses = (ownerState) => {
 
   const slots = {
     icon: ["filterIcon"],
+    toolbar: [ExportToolBar],
   };
 
   return composeClasses(slots, getDataGridUtilityClass, classes);
@@ -158,10 +160,11 @@ const Table = ({ columns, url, queryParams = {}, queryEnabled = true }) => {
         filterMode="server"
         paginationMode="server"
         loading={isLoading}
-        onFilterModelChange={handleFilterChange}
-        components={{
-          ColumnHeaderFilterIconButton: customFilterIconButton,
+        slots={{
+          toolbar: ExportToolBar,
+          columnHeaderFilterIconButton: customFilterIconButton,
         }}
+        onFilterModelChange={handleFilterChange}
         sx={{
           [`& .${gridClasses.columnHeader}:not(.${gridClasses["columnHeader--filtered"]}) .${gridClasses.filterIcon}`]:
             (theme) => ({
@@ -171,12 +174,10 @@ const Table = ({ columns, url, queryParams = {}, queryEnabled = true }) => {
               }),
             }),
         }}
-        componentsProps={{
+        slotProps={{
           panel: {
             anchorEl: filterButtonEl,
           },
-          footer: {},
-
           filterPanel: {
             // Force usage of "And" operator
             // Display columns by ascending alphabetical order
@@ -235,7 +236,7 @@ const Table = ({ columns, url, queryParams = {}, queryEnabled = true }) => {
         <Grid item>
           <TablePagination
             component="div"
-            count={100}
+            count={Math.ceil(count / rowsPerPage)}
             page={page}
             onPageChange={(event, newPage) => setPage(newPage)}
             rowsPerPage={rowsPerPage}

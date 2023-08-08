@@ -5,7 +5,6 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Endpoints } from "utils/httpServices";
 import { LotsDataTable } from "./components/DataTable";
 import { LotsDataPlot } from "./components/DataPlot";
-import dayjs from "dayjs";
 import Table from "./components/Table";
 
 export const Lots = () => {
@@ -38,7 +37,7 @@ export const Lots = () => {
       width: 150,
       sortable: false,
       type: "date",
-      renderCell: ({ row }) => dayjs(row?.start_time).format("YYYY-MM-DD"),
+      valueGetter: (params) => new Date(params.row.start_time),
     },
     {
       field: "program_name",
@@ -84,11 +83,11 @@ export const Lots = () => {
       field: "complete_time",
       headerName: "Complete Time",
       sortable: false,
-      filterable: false,
       // flex: 1,
       width: 170,
-      renderCell: ({ row }) =>
-        row?.complete_time && dayjs(row?.complete_time).format("YYYY-MM-DD"),
+      type: "date",
+      valueGetter: (params) =>
+        params.row.complete_time && new Date(params.row.complete_time),
     },
     {
       field: "actions",

@@ -1,7 +1,12 @@
-const { GridToolbarContainer, GridToolbarExport } = require("@mui/x-data-grid");
+const {
+  GridToolbarContainer,
+  GridToolbarExport,
+  GridToolbarDensitySelector,
+} = require("@mui/x-data-grid");
 
 const ExportToolBar = () => (
   <GridToolbarContainer>
+    <GridToolbarDensitySelector />
     <GridToolbarExport csvOptions={{ disableToolbarButton: true }} />
   </GridToolbarContainer>
 );

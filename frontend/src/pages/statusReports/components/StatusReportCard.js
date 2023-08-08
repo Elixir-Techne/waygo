@@ -24,12 +24,7 @@ const TypoGraphyLabel = styled(ArgonTypography)({
 
 const StatusReportCard = ({ data }) => {
   const status = getChamberStatus(data?.status_code);
-  console.log(status);
   const isMobile = useMediaQuery("(max-width:475px)");
-  const diff =
-    data?.lot?.start_time && data?.lot?.complete_time
-      ? dayjs(data?.lot?.complete_time).diff(data?.lot?.start_time)
-      : undefined;
 
   return (
     <Card

@@ -16,9 +16,6 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import waygoPng from "assets/images/waygo.png";
 
-// Image
-const bgImage =
-  "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg";
 
 const initialValues = {
   userName: "",

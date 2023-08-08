@@ -38,6 +38,14 @@ export const LotsDataPlot = ({ lotID }) => {
     stroke: {
       curve: "smooth",
     },
+    tooltip: {
+      x: {
+        formatter: function (args) {
+          return dayjs(args).format("D-MMM-YY hh:mm a");
+        },
+        show: true,
+      },
+    },
     xaxis: {
       type: "datetime",
       tickAmount: 24, // Display 24 ticks for 24 hours (one tick per hour)
