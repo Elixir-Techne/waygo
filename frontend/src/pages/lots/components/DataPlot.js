@@ -38,8 +38,17 @@ export const LotsDataPlot = ({ lotID }) => {
     stroke: {
       curve: "smooth",
     },
+    tooltip: {
+      x: {
+        formatter: function (args) {
+          return dayjs(args).format("D-MMM-YY hh:mm a");
+        },
+        show: true,
+      },
+    },
     xaxis: {
       type: "datetime",
+      tickAmount: 24, // Display 24 ticks for 24 hours (one tick per hour)
     },
     colors: ["#2E93fA", "#66DA26", "#546E7A", "#7be3af", "#c5206ab5"],
   });
@@ -64,10 +73,15 @@ export const LotsDataPlot = ({ lotID }) => {
     if (data) {
       const temp = data?.reduce((acc, curr) => {
         keys.forEach((key) => {
+          const time = dayjs(curr.time);
+          const startOfHour = time
+            .startOf("hour")
+            .format("YYYY-MM-DD HH:mm:ss");
           const obj = {
-            x: dayjs(curr.time).format("YYYY-MM-DD"),
+            x: startOfHour, // or you can use endOfHour if you prefer
             y: curr[key],
           };
+
           if (acc?.[key]) {
             acc[key].push(obj);
           } else {
@@ -76,6 +90,7 @@ export const LotsDataPlot = ({ lotID }) => {
         });
         return acc;
       }, {});
+
       setSeries(Object.entries(temp).map(([k, v]) => ({ name: k, data: v })));
     }
   }, [data]);

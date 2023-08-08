@@ -1,5 +1,3 @@
-import { DataGrid } from "@mui/x-data-grid";
-import { useQuery } from "@tanstack/react-query";
 import ArgonBox from "components/ArgonBox";
 import ArgonButton from "components/ArgonButton";
 import React from "react";
@@ -7,54 +5,39 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Endpoints } from "utils/httpServices";
 import { LotsDataTable } from "./components/DataTable";
 import { LotsDataPlot } from "./components/DataPlot";
-import ExportToolBar from "examples/ExportToolBar";
-import dayjs from "dayjs";
+import Table from "./components/Table";
 
 export const Lots = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id, view } = useParams();
 
-  const [paginationModel, setPaginationModel] = React.useState({
-    pageSize: 25,
-    page: 0,
-  });
   const name = location.pathname.split("/").slice(1);
 
-  const url =
-    location.pathname === "/ongoing-lots"
-      ? Endpoints.ongoingLots
-      : Endpoints.historicalLots;
-
-  const { data, isLoading } = useQuery(
-    [
-      url,
-      {
-        page: paginationModel.page + 1,
-        page_size: paginationModel.pageSize,
-      },
-    ],
-    {
-      enabled: !id,
-    }
-  );
-
   const columns = [
-    { field: "chamber", headerName: "Chamber", width: 90 },
+    {
+      field: "chamber",
+      headerName: "Chamber",
+      width: 140,
+      type: "string",
+      sortable: false,
+    },
     {
       field: "id",
       headerName: "Lot ID",
       // flex: 1,
       width: 155,
       sortable: false,
+      filterable: false,
     },
     {
       field: "start_time",
       headerName: "Start Time",
       // flex: 1,
-      width: 130,
+      width: 150,
       sortable: false,
-      renderCell: ({ row }) => dayjs(row.start_time).format("YYYY-MM-DD"),
+      type: "date",
+      valueGetter: (params) => new Date(params.row.start_time),
     },
     {
       field: "program_name",
@@ -62,6 +45,7 @@ export const Lots = () => {
       // flex: 1,
       width: 210,
       sortable: false,
+      filterable: false,
     },
     {
       field: "total_commands",
@@ -69,6 +53,7 @@ export const Lots = () => {
       sortable: false,
       // flex: 1,
       width: 110,
+      filterable: false,
     },
     {
       field: "species",
@@ -76,6 +61,7 @@ export const Lots = () => {
       sortable: false,
       // flex: 1,
       width: 135,
+      type: "string",
     },
     {
       field: "quantity",
@@ -83,6 +69,7 @@ export const Lots = () => {
       sortable: false,
       // flex: 1,
       width: 110,
+      filterable: false,
     },
     {
       field: "duration",
@@ -90,12 +77,23 @@ export const Lots = () => {
       sortable: false,
       // flex: 1,
       width: 140,
+      filterable: false,
+    },
+    {
+      field: "complete_time",
+      headerName: "Complete Time",
+      sortable: false,
+      // flex: 1,
+      width: 170,
+      type: "date",
+      valueGetter: (params) =>
+        params.row.complete_time && new Date(params.row.complete_time),
     },
     {
       field: "actions",
       type: "actions",
       sortable: false,
-      width: 290,
+      width: 270,
       renderCell: ({ row }) => (
         <ArgonBox gap="10px" sx={{ width: "100%", display: "flex" }}>
           <ArgonButton
@@ -126,19 +124,13 @@ export const Lots = () => {
       default:
         return (
           <>
-            <DataGrid
-              autoHeight
-              rows={data?.results || []}
+            <Table
               columns={columns}
-              loading={isLoading}
-              disableRowSelectionOnClick
-              sx={{ overflowY: "auto" }}
-              rowCount={data?.count || 0}
-              paginationMode="server"
-              pageSizeOptions={[25, 50, 100]}
-              paginationModel={paginationModel}
-              onPaginationModelChange={setPaginationModel}
-              slots={{ toolbar: ExportToolBar }}
+              url={
+                location.pathname === "/ongoing-lots"
+                  ? Endpoints.ongoingLots
+                  : Endpoints.historicalLots
+              }
             />
           </>
         );

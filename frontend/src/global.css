@@ -1,6 +1,6 @@
 ::-webkit-scrollbar {
     width:2px;
-    height:2px;
+    height:8px;
   }
   
 ::-webkit-scrollbar-track {
@@ -21,3 +21,7 @@
   .css-100dcyg{
     padding:15px !important
   }
+
+.MuiDataGrid-footerContainer {
+  display: none !important;
+}

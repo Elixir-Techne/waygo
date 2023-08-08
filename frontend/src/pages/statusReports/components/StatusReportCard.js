@@ -23,12 +23,8 @@ const TypoGraphyLabel = styled(ArgonTypography)({
 });
 
 const StatusReportCard = ({ data }) => {
-  const status = getChamberStatus(data?.lot?.status_code);
+  const status = getChamberStatus(data?.status_code);
   const isMobile = useMediaQuery("(max-width:475px)");
-  const diff =
-    data?.lot?.start_time && data?.lot?.complete_time
-      ? dayjs(data?.lot?.complete_time).diff(data?.lot?.start_time)
-      : undefined;
 
   return (
     <Card
@@ -39,6 +35,7 @@ const StatusReportCard = ({ data }) => {
         backgroundColor: status === "idel" ? "blue" : "green",
         boxShadow: "0px 0px 5px 2px lightgray",
         borderRadius: "5px",
+        minHeight: "421px",
         maxHeight: "421px",
       }}
     >
@@ -56,17 +53,17 @@ const StatusReportCard = ({ data }) => {
         </ArgonTypography>
         <ArgonTypography {...typographyProps}>
           <TypoGraphyLabel>Status:</TypoGraphyLabel>
-          {getChamberStatus(data?.lot?.status_code)}
+          {getChamberStatus(data?.status_code)}
         </ArgonTypography>
         {status !== "Idle" ? (
           <>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Species:</TypoGraphyLabel>
-              {data?.latest_lot_data?.species}
+              {data?.lot?.species}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Quantity:</TypoGraphyLabel>
-              {data?.latest_lot_data?.quantity}
+              {data?.lot?.quantity}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>RH:</TypoGraphyLabel>
@@ -98,12 +95,7 @@ const StatusReportCard = ({ data }) => {
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Time ellapsed:</TypoGraphyLabel>
-              {data?.lot?.start_time && data?.lot?.complete_time
-                ? `${dayjs(data?.lot?.complete_time).from(
-                    data?.lot?.start_time,
-                    true
-                  )}`
-                : ""}
+              {data?.lot?.duration}
             </ArgonTypography>
           </>
         ) : (

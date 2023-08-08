@@ -1,42 +1,29 @@
-import { DataGrid } from "@mui/x-data-grid";
-import { useQuery } from "@tanstack/react-query";
 import ArgonBox from "components/ArgonBox";
 import ArgonButton from "components/ArgonButton";
-import { useRef, useState } from "react";
 import { Endpoints } from "utils/httpServices";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useNavigate } from "react-router-dom";
-import ExportToolBar from "examples/ExportToolBar";
+import Table from "./Table";
+import dayjs from "dayjs";
 
 export const LotsDataTable = ({ lotID }) => {
   const navigate = useNavigate();
-  const ref = useRef();
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 25,
-    page: 0,
-  });
-
-  const { data, isLoading } = useQuery(
-    [
-      `${Endpoints.lots}${lotID}/lot-data/`,
-      {
-        page: paginationModel.page + 1,
-        page_size: paginationModel.pageSize,
-      },
-    ],
-    {
-      enabled: true,
-    }
-  );
 
   const columns = [
-    { field: "amc", headerName: "Amc", width: 110 },
+    {
+      field: "amc",
+      headerName: "Amc",
+      width: 110,
+      sortable: false,
+      filterable: false,
+    },
     {
       field: "command_name",
       headerName: "Command",
       // flex: 1,
       width: 130,
       sortable: false,
+      filterable: false,
     },
     {
       field: "dbt1",
@@ -44,6 +31,7 @@ export const LotsDataTable = ({ lotID }) => {
       // flex: 1,
       width: 80,
       sortable: false,
+      filterable: false,
     },
     {
       field: "dbt2",
@@ -52,6 +40,7 @@ export const LotsDataTable = ({ lotID }) => {
       // flex: 1,
       width: 80,
       sortable: false,
+      filterable: false,
     },
     {
       field: "details",
@@ -59,6 +48,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 100,
+      filterable: false,
     },
     {
       field: "fan_ccw",
@@ -66,6 +56,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 90,
+      filterable: false,
     },
     {
       field: "fan_cw",
@@ -73,6 +64,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 90,
+      filterable: false,
     },
     {
       field: "flaps",
@@ -80,6 +72,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "heat",
@@ -87,6 +80,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "id",
@@ -94,6 +88,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 100,
+      filterable: false,
     },
     {
       field: "mc1",
@@ -101,6 +96,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "mc2",
@@ -108,6 +104,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "mc3",
@@ -115,6 +112,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "mc4",
@@ -122,6 +120,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "mc5",
@@ -129,6 +128,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "mc6",
@@ -136,6 +136,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "mc7",
@@ -143,6 +144,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "mc8",
@@ -150,6 +152,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "reserved",
@@ -157,6 +160,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 100,
+      filterable: false,
     },
     {
       field: "rh",
@@ -164,6 +168,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "spray",
@@ -171,6 +176,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "time",
@@ -178,6 +184,8 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 200,
+      filterable: false,
+      renderCell: ({ row }) => dayjs(row?.time).format("YYYY-MM-DD HH:mm a"),
     },
     {
       field: "wbt1",
@@ -185,6 +193,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "wbt2",
@@ -192,6 +201,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 80,
+      filterable: false,
     },
     {
       field: "wood_temp1",
@@ -199,6 +209,7 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 120,
+      filterable: false,
     },
     {
       field: "wood_temp2",
@@ -206,11 +217,12 @@ export const LotsDataTable = ({ lotID }) => {
       sortable: false,
       // flex: 1,
       width: 120,
+      filterable: false,
     },
   ];
 
   return (
-    <ArgonBox sx={{ height: "100%", width: "100%" }} mt={8}>
+    <ArgonBox sx={{ height: "100vh", width: "100%" }} mt={8}>
       <ArgonBox mb={2} display="flex" justifyContent="space-between">
         <ArgonButton
           onClick={() => {
@@ -221,20 +233,7 @@ export const LotsDataTable = ({ lotID }) => {
           Back
         </ArgonButton>
       </ArgonBox>
-      <DataGrid
-        ref={ref}
-        rows={data?.results || []}
-        autoHeight
-        columns={columns}
-        loading={isLoading}
-        disableRowSelectionOnClick
-        rowCount={data?.count || 0}
-        paginationMode="server"
-        pageSizeOptions={[25, 50, 100]}
-        paginationModel={paginationModel}
-        onPaginationModelChange={setPaginationModel}
-        slots={{ toolbar: ExportToolBar }}
-      />
+      <Table columns={columns} url={`${Endpoints.lots}${lotID}/lot-data/`} />
     </ArgonBox>
   );
 };
