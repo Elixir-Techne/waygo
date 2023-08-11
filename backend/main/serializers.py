@@ -45,6 +45,7 @@ class LotDataSerializer(ModelSerializer):
 class StatusReportListSerializer(ModelSerializer):
     lot = serializers.SerializerMethodField(read_only=True)
     latest_lot_data = serializers.SerializerMethodField(read_only=True)
+    last_completed_lot = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = StatusReport
@@ -65,6 +66,12 @@ class StatusReportListSerializer(ModelSerializer):
             ).order_by('-time')
             lot_data = LotDataSerializer(instance=lot_data[0], many=False).data if lot_data.exists() else None
         return lot_data
+
+    def get_last_completed_lot(self, instance):
+        lot = None
+        if instance.status_code == 1:
+            lot = Lot.objects.filter(chamber=instance.chamber).last()
+        return lot.id if lot else None
 
 
 class StatusReportSerializer(ModelSerializer):

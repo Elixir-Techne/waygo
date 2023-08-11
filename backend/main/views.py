@@ -294,7 +294,7 @@ class StatusReportViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixi
     def chamber_latest_status(self, request):
         distinct_chambers = StatusReport.objects.filter(
             company=self.request.user.appuser.company
-        ).values('chamber').distinct()
+        ).values('chamber').distinct().order_by('chamber')
         latest_chamber_status = []
         for chamber in distinct_chambers:
             latest = StatusReport.objects.filter(chamber=chamber.get('chamber')).order_by('server_time').last()
@@ -318,7 +318,7 @@ def statistic(request):
         'total_chamber_quantity_dried': [],
     }
     lots = Lot.objects.filter(
-        company=request.user.appuser.company, start_time__range=[start, end], complete_time__isnull=False
+        company=request.user.appuser.company, complete_time__range=[start, end], complete_time__isnull=False
     )
 
     wood_dried = lots.values('species').annotate(total_quantity=Sum('quantity'))
@@ -334,7 +334,9 @@ def statistic(request):
             'x': chamber_quantity.get('chamber'),
             'y': chamber_quantity.get('total_quantity')
         })
-    chambers_status = StatusReport.objects.filter(server_time__range=[start, end]).order_by('chamber', 'server_time')
+    chambers_status = StatusReport.objects.filter(
+        time__range=[start, end], company=request.user.appuser.company
+    ).order_by('chamber', 'server_time')
     operating_time_dict = {}
     idle_time_dict = {}
     prev_server_time = {}
