@@ -78,11 +78,16 @@ const Statistics = () => {
             <DatePicker
               value={start}
               onChange={(newValue) => setStart(newValue)}
+              disableFuture
             />
           </ArgonBox>
           <ArgonBox display="flex" flexDirection="column">
             <ArgonTypography>End Date</ArgonTypography>
-            <DatePicker value={end} onChange={(newValue) => setEnd(newValue)} />
+            <DatePicker
+              value={end}
+              onChange={(newValue) => setEnd(newValue)}
+              disableFuture
+            />
           </ArgonBox>
         </LocalizationProvider>
       </ArgonBox>
@@ -152,8 +157,9 @@ const Statistics = () => {
                         formatter: (p, { seriesIndex, dataPointIndex, w }) => {
                           let idle = w?.config?.series[1]?.data[dataPointIndex];
                           if (idle && p) {
-                            let total = parseFloat(p);
+                            let op = parseFloat(p);
                             idle = parseFloat(idle);
+                            const total = op + idle;
                             return `${
                               Math.round(((total - idle) / total) * 10000) / 100
                             } %`;
