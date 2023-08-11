@@ -30,9 +30,8 @@ const StatusReportCard = ({ data }) => {
     <Card
       sx={{
         flex: 1,
-        background: "transparent",
         minWidth: isMobile ? "260px" : "350px",
-        backgroundColor: status === "idel" ? "blue" : "green",
+        backgroundColor: status === "Idle" ? "#4fa7b7" : "green",
         boxShadow: "0px 0px 5px 2px lightgray",
         borderRadius: "5px",
         minHeight: "421px",
@@ -102,15 +101,12 @@ const StatusReportCard = ({ data }) => {
           <>
             <ArgonTypography {...typographyProps}>
               <TypoGraphyLabel>Last completed lot:</TypoGraphyLabel>
-              {data?.lot?.id}
+              {data?.last_completed_lot}
             </ArgonTypography>
             <ArgonTypography {...typographyProps}>
-              <TypoGraphyLabel>Idel for:</TypoGraphyLabel>
-              {data?.lot?.start_time && data?.lot?.complete_time
-                ? `${dayjs(data?.lot?.complete_time).from(
-                    data?.lot?.start_time,
-                    true
-                  )}`
+              <TypoGraphyLabel>Idle for:</TypoGraphyLabel>
+              {data?.server_time
+                ? `${dayjs(data?.server_time).fromNow(true)}`
                 : ""}
             </ArgonTypography>
           </>
